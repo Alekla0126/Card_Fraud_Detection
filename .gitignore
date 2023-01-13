@@ -1,3 +1,8 @@
+# Ignore the Dataset
+*.csv
+# Ignore the directory with the datasets
+/Datasets
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
