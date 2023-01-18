@@ -2,4 +2,4 @@
 
 curl -O 
 curl -O 
-cat *csv > fraudDataset.csv
+awk 'FNR==1 && NR!=1{next;}{print}' *.csv > master.csv
