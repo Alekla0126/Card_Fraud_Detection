@@ -6,8 +6,8 @@
 #                ╚██████╗███████║ ╚████╔╝     ███████║██║     ███████╗██║   ██║      ██║   ███████╗██║  ██║
 #                 ╚═════╝╚══════╝  ╚═══╝      ╚══════╝╚═╝     ╚══════╝╚═╝   ╚═╝      ╚═╝   ╚══════╝╚═╝  ╚═╝
 
-# Example: sh csv_divider.sh --input /Users/alejandro/Desktop/CSV-splitter/labelled_newscatcher_dataset.csv --train_ratio 50 
-# --save_train /Users/alejandro/Desktop/CSV-splitter --save_test /Users/alejandro/Desktop/CSV-splitter --shuffle
+# Example:  sh CSV_splitter.sh --input /Volumes/ALEJANDRO/S.E./Credit-Card-Fraud-Detection/Datasets/master.csv 
+# --train_ratio 80 --save_train /Volumes/ALEJANDRO/S.E./Credit-Card-Fraud-Detection/Datasets --save_test /Volumes/ALEJANDRO/S.E./Credit-Card-Fraud-Detection/Datasets --shuffle
 
 # Starts with 0.
 SHUFFLE=0
