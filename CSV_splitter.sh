@@ -6,8 +6,7 @@
 #                ╚██████╗███████║ ╚████╔╝     ███████║██║     ███████╗██║   ██║      ██║   ███████╗██║  ██║
 #                 ╚═════╝╚══════╝  ╚═══╝      ╚══════╝╚═╝     ╚══════╝╚═╝   ╚═╝      ╚═╝   ╚══════╝╚═╝  ╚═╝
 
-# Example:  sh CSV_splitter.sh --input /Volumes/ALEJANDRO/S.E./Credit-Card-Fraud-Detection/Datasets/master.csv 
-# --train_ratio 80 --save_train /Volumes/ALEJANDRO/S.E./Credit-Card-Fraud-Detection/Datasets --save_test /Volumes/ALEJANDRO/S.E./Credit-Card-Fraud-Detection/Datasets --shuffle
+# Example:  sh CSV_splitter.sh --input /Volumes/ALEJANDRO/S.E./Credit-Card-Fraud-Detection/Datasets/master.csv --train_ratio 80 --save_train /Volumes/ALEJANDRO/S.E./Credit-Card-Fraud-Detection/Datasets --save_test /Volumes/ALEJANDRO/S.E./Credit-Card-Fraud-Detection/Datasets --shuffle
 
 # Starts with 0.
 SHUFFLE=0
