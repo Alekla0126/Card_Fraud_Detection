@@ -38,14 +38,14 @@ def add_links(transactions_file, links_file, output_file, threshold, num_threads
             for i, row in enumerate(reader):
                 print(f"Processing transaction {i}...")
                 if int(row['is_fraud']) == 1:
-                    if random.random() <= threshold:
+                    if random.random()+.0052 <= threshold:
                         url = executor.submit(random.choice, good_links)
                         num_incorrect_good_links += 1 
                     else:
                         url = executor.submit(random.choice, bad_links)
                         num_bad_links += 1
-                else:
-                    if random.random()+0.3 <= threshold:
+                elif int(row['is_fraud']) == 0:
+                    if random.random()+.9948 <= threshold:
                         url = executor.submit(random.choice, bad_links)
                         num_incorrect_bad_links += 1
                     else:
