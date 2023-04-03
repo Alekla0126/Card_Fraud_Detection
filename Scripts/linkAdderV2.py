@@ -1,4 +1,4 @@
-import concurrent.futures
+from collections import defaultdict
 import argparse
 import string
 import random
@@ -9,23 +9,18 @@ import os
 def is_printable(s):
     return all(c in string.printable for c in s)
 
-def add_links(transactions_file, links_file, output_file, threshold, num_threads):
+def add_links(transactions_file, links_file, output_file, threshold):
     print("Reading links CSV file...")
     # Read the links CSV file and extract the good and bad links
-    good_links = []
-    bad_links = []
+    links = defaultdict(list)
     with open(links_file, 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            if row['Label'] == 'good':
-                good_links.append(row['URL'])
-            elif row['Label'] == 'bad':
-                bad_links.append(row['URL'])
+            links[row['Label']].append(row['URL'])
 
     # Drop rows containing non-printable characters from the links lists
     print('Drop rows containing non-printable characters...')
-    good_links = [link for link in good_links if is_printable(link)]
-    bad_links = [link for link in bad_links if is_printable(link)]
+    links = {label: [link for link in links[label] if is_printable(link)] for label in links}
 
     print("Processing transactions...")
     num_good_links = 0
@@ -33,40 +28,52 @@ def add_links(transactions_file, links_file, output_file, threshold, num_threads
     num_incorrect_bad_links = 0
     num_incorrect_good_links = 0
     # Process the transactions using multiple threads
-    with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
-        futures = []
-        with open(output_file, 'w', newline='') as f_out, open(transactions_file, 'r') as f_in:
-            reader = csv.DictReader(f_in)
-            fieldnames = reader.fieldnames + ['Link']
-            writer = csv.DictWriter(f_out, fieldnames=fieldnames)
-            writer.writeheader()
+    with open(output_file, 'w', newline='') as f_out, open(transactions_file, 'r') as f_in:
+        reader = csv.DictReader(f_in)
+        fieldnames = reader.fieldnames + ['Link']
+        writer = csv.DictWriter(f_out, fieldnames=fieldnames)
+        writer.writeheader()
 
-            # loop through rows
-            for i, row in enumerate(reader):
-                print(f"Processing transaction {i}...")
-                # Get the link for this row
-                link = None
-                if int(row['is_fraud']) == 1:
-                    if random.random()+.00521 <= threshold:
-                        link = good_links[i % len(good_links)]
-                    else:
-                        link = bad_links[i % len(bad_links)]
-                        num_incorrect_good_links += 1 
-                elif int(row['is_fraud']) == 0:
-                    if random.random()+.995 <= threshold:
-                        link = bad_links[i % len(bad_links)]
-                    else:
-                        link = good_links[i % len(good_links)]
-                        num_incorrect_bad_links += 1
-
-                # Update the links column
-                row['Link'] = link
-                writer.writerow(row)
-
-                if link in good_links:
-                    num_good_links += 1
-                elif link in bad_links:
+        # Instantiating the lists
+        good_links = links['good']
+        bad_links = links['bad']
+        # Loop through rows
+        i_good = 0
+        i_bad = 0
+        for i, row in enumerate(reader):
+            print(f"Processing transaction {i}...")
+            # Get the link for this row
+            link = None
+            if int(row['is_fraud']) == 1:
+                if random.random()+.00521 <= threshold:                          
+                    if i_good == len(links['good']):
+                        i_good = 0
+                    link = good_links[i_good]
+                    num_incorrect_good_links += 1
+                    i_good += 1
+                else:
+                    if i_bad >= len(bad_links):
+                        i_bad = 0
+                    link = bad_links[i_bad]
                     num_bad_links += 1
+                    i_bad += 1
+            elif int(row['is_fraud']) == 0:
+                if random.random()+.995 <= threshold:
+                    if i_bad >= len(bad_links):
+                        i_bad = 0
+                    link = bad_links[i_bad]
+                    num_incorrect_bad_links += 1
+                    i_bad += 1
+                else:
+                    if i_good >= len(links['good']):
+                        i_good = 0
+                    link = good_links[i_good]
+                    num_good_links +=1
+                    i_good += 1
+
+            # Update the links column
+            row['Link'] = link
+            writer.writerow(row)
 
     print("Finished processing transactions.")
     print(f"Number of good links: {num_good_links}")
@@ -78,7 +85,6 @@ def add_links(transactions_file, links_file, output_file, threshold, num_threads
     time.sleep(5)
     # Indicate that the process is complete.
     os.system('say "Process complete, bro"')
-    
 
 def main():
     parser = argparse.ArgumentParser(description='Add links to transactions')
@@ -86,11 +92,10 @@ def main():
     parser.add_argument('links_file', type=str, help='Path to the links CSV file')
     parser.add_argument('output_file', type=str, help='Path to the output CSV file')
     parser.add_argument('threshold', type=float, help='Probability threshold for adding bad links')
-    parser.add_argument('num_threads', type=int, help='Number of threads to use')
-
     args = parser.parse_args()
 
-    add_links(args.transactions_file, args.links_file, args.output_file, args.threshold, args.num_threads)
+    add_links(args.transactions_file, args.links_file, args.output_file, args.threshold)
+
 
 if __name__ == '__main__':
     main()
