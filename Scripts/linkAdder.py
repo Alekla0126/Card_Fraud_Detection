@@ -1,8 +1,13 @@
 import concurrent.futures
 import argparse
+import string
 import random
 import time
 import csv
+import os
+
+def is_printable(s):
+    return all(c in string.printable for c in s)
 
 def add_links(transactions_file, links_file, output_file, threshold, num_threads):
     print("Reading links CSV file...")
@@ -17,9 +22,10 @@ def add_links(transactions_file, links_file, output_file, threshold, num_threads
             elif row['Label'] == 'bad':
                 bad_links.append(row['URL'])
 
-        # Make copies of the original good and bad links lists so we can reinitialize them
-        good_links_original = list(good_links)
-        bad_links_original = list(bad_links)
+    # Drop rows containing non-printable characters from the links lists
+    print('Drop rows containing non-printable characters...')
+    good_links = [link for link in good_links if is_printable(link)]
+    bad_links = [link for link in bad_links if is_printable(link)]
 
     print("Processing transactions...")
     num_good_links = 0
@@ -35,33 +41,43 @@ def add_links(transactions_file, links_file, output_file, threshold, num_threads
             writer = csv.DictWriter(f_out, fieldnames=fieldnames)
             writer.writeheader()
 
+            # loop through rows
             for i, row in enumerate(reader):
-                print(f"Processing transaction {i}...")
+                # get the link for this row
+                link = None
                 if int(row['is_fraud']) == 1:
-                    if random.random()+.0052 <= threshold:
-                        url = executor.submit(random.choice, good_links)
+                    if random.random()+.00521 <= threshold:
+                        link = good_links[i % len(good_links)]
+                    else:
+                        link = bad_links[i % len(bad_links)]
                         num_incorrect_good_links += 1 
-                    else:
-                        url = executor.submit(random.choice, bad_links)
-                        num_bad_links += 1
                 elif int(row['is_fraud']) == 0:
-                    if random.random()+.9948 <= threshold:
-                        url = executor.submit(random.choice, bad_links)
-                        num_incorrect_bad_links += 1
+                    if random.random()+.995 <= threshold:
+                        link = bad_links[i % len(bad_links)]
                     else:
-                        url = executor.submit(random.choice, good_links)
-                        num_good_links += 1
+                        link = good_links[i % len(good_links)]
+                        num_incorrect_bad_links += 1
 
                 # Update the links column
-                link = url.result()
                 row['Link'] = link
                 writer.writerow(row)
 
+                if link in good_links:
+                    num_good_links += 1
+                elif link in bad_links:
+                    num_bad_links += 1
+
     print("Finished processing transactions.")
-    print(f"Number of good links: {len(good_links_original)}")
-    print(f"Number of bad links: {len(bad_links_original)}")
+    print(f"Number of good links: {num_good_links}")
+    print(f"Number of bad links: {num_bad_links}")
     print(f"Number of incorrectly paired good links: {num_incorrect_good_links}")
     print(f"Number of incorrectly paired bad links: {num_incorrect_bad_links}")
+    # Play a sound to indicate that the process is complete.
+    os.system('afplay /System/Library/Sounds/Glass.aiff')
+    time.sleep(5)
+    # Indicate that the process is complete.
+    os.system('say "Process complete, bro"')
+    
 
 def main():
     parser = argparse.ArgumentParser(description='Add links to transactions')
