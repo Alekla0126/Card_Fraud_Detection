@@ -41,10 +41,10 @@ def add_links(transactions_file, links_file, output_file, threshold, num_threads
             writer = csv.DictWriter(f_out, fieldnames=fieldnames)
             writer.writeheader()
 
-            # loop through rows
+            # Loop through rows.
             for i, row in enumerate(reader):
                 print(f"Processing transaction {i}...")
-                # Get the link for this row
+                # Get the link for this row.
                 link = None
                 if int(row['is_fraud']) == 1:
                     if random.random()+.00521 <= threshold:
@@ -59,7 +59,7 @@ def add_links(transactions_file, links_file, output_file, threshold, num_threads
                         link = good_links[i % len(good_links)]
                         num_incorrect_bad_links += 1
 
-                # Update the links column
+                # Update the links column.
                 row['Link'] = link
                 writer.writerow(row)
 
