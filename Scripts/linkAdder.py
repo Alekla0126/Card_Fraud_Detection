@@ -37,7 +37,7 @@ def add_links(transactions_file, links_file, output_file, threshold, num_threads
         futures = []
         with open(output_file, 'w', newline='') as f_out, open(transactions_file, 'r') as f_in:
             reader = csv.DictReader(f_in)
-            fieldnames = reader.fieldnames + ['Link']
+            fieldnames = reader.fieldnames + ['url']
             writer = csv.DictWriter(f_out, fieldnames=fieldnames)
             writer.writeheader()
 
@@ -60,7 +60,7 @@ def add_links(transactions_file, links_file, output_file, threshold, num_threads
                         num_incorrect_bad_links += 1
 
                 # Update the links column.
-                row['Link'] = link
+                row['url'] = link
                 writer.writerow(row)
 
                 if link in good_links:
