@@ -1,5 +1,6 @@
-from sklearn.preprocessing import OrdinalEncoder, StandardScaler
 from sklearn.feature_extraction.text import CountVectorizer
+# from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import OrdinalEncoder
 from nltk.stem.snowball import SnowballStemmer
 from flask import Flask, jsonify, request
 from nltk.tokenize import RegexpTokenizer
@@ -35,7 +36,7 @@ def prepare_data(X):
 enc = OrdinalEncoder(dtype=np.int64)
 
 # Create a StandardScaler object
-scaler = StandardScaler()
+# scaler = StandardScaler()
 
 # Define the endpoint for making predictions
 @app.route('/predict', methods=['POST'])
@@ -62,7 +63,7 @@ def predict():
     merged_df.loc[:, ['category','merchant','job', 'text_tokenized', 'text_stemmed', 'text_sent']] = enc.transform(merged_df[['category','merchant','job', 'text_tokenized', 'text_stemmed', 'text_sent']])
 
     # Scale the features
-    merged_df = scaler.transform(merged_df)
+    # merged_df = scaler.transform(merged_df)
 
     # Make predictions
     predictions = model.predict(merged_df)
