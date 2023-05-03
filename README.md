@@ -9,21 +9,34 @@ interfaces that communicate with the other layers. The system aims to adhere in 
 such as ISO 27001 and the Payment Card Industry Data Security Standard (PCI DSS) to ensure the security and privacy of 
 user data. The system is scalable, maintainable, and deployable on cloud platforms such as render.com.
 
-# Datasets
+# Requirements
 
+- Requirements
+- Python 3.7 or later
+- Flask 2.0 or later
+- TensorFlow 2.6 or later
+- scikit-learn 1.0 or later
+- requests 2.26 or later
 
+## Installation
 
-## How to run?
+Clone the repository: git clone https://github.com/Alekla0126/Credit-Card-Fraud-Detection
+Install the required packages: pip install -r requirements.txt
+Run the application: python app.py
 
-The file explorer is accessible using the button in left corner of the navigation bar. You can create a new file by clicking the **New file** button in the file explorer. You can also create folders by clicking the **New folder** button.
+## Local usage
+
+1. Open a web browser and go to http://localhost:5000/.
+2. Enter a URL or a credit card number and click the "Detect" button.
+3. Wait for the prediction result to appear on the screen.
 
 ## To do
 
 All your files and folders are presented as a tree in the file explorer. You can switch from one to another by clicking a file in the tree.
 
-## Rename a file
+## Installation
 
-You can rename the current file by clicking the file name in the navigation bar or by clicking the **Rename** button in the file explorer.
+This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Delete a file
 
