@@ -1,0 +1,129 @@
+body,
+html {
+    background: linear-gradient(135deg, #EABDD3, #4EC5C1, #C6A3E3, #80D0C7);
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    font-weight: 300;
+    height: 100%;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(2px);
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin: auto;
+    max-width: 500px;
+    width: 90%;
+    padding: 2vh 10px;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+h1 {
+    color: #0f0f0f;
+    font-size: 3vh;
+    font-weight: 700;
+    margin: 0;
+    padding: 1vh;
+    text-align: center;
+    font-family: 'Roboto';
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 2vh;
+    overflow-y: auto;
+    flex: 1;
+}
+
+label {
+    flex-basis: 100%;
+    font-size: 1.5vh;
+    font-weight: 400;
+    margin-top: 1vh;
+    margin-bottom: 0.5vh;
+    font-weight: normal;
+}
+
+input[type="text"] {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #393939;
+    color: #393939;
+    font-family: 'Roboto', sans-serif;
+    font-size: 2vh;
+    margin: 0.5vh 0;
+    padding: 0.5vh;
+    opacity: 0.8;
+    flex-basis: 100%;
+    height: 2.5vh;
+}
+
+input[type="submit"] {
+    background-color: #5BC3A3;
+    border: none;
+    border-radius: 10px;
+    color: #FFF;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-size: 3vh;
+    margin-top: 2vh;
+    padding: 1vh 2vh;
+    transition: background-color 0.3s ease-in-out;
+    flex-basis: 100%;
+}
+
+input[type="submit"]:hover {
+    background-color: #44957F;
+}
+
+@media screen and (min-width: 600px) {
+    input[type="text"] {
+        font-size: 1.5vh;
+    }
+
+    label {
+        font-size: 1vh;
+    }
+
+    h1 {
+        font-size: 2.5vh;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    input[type="text"] {
+        font-size: 2vh;
+    }
+
+    label {
+        font-size: 1.5vh;
+    }
+
+    h1 {
+        font-size: 3.5vh;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    input[type="text"] {
+        font-size: 2.5vh;
+    }
+
+    label {
+        font-size: 2vh;
+    }
+
+    h1 {
+        font-size: 4.5vh;
+    }
+}
