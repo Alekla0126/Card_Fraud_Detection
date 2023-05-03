@@ -1,13 +1,13 @@
 # Credit Card Fraud detection
 
-Credit Card Fraud Detection is a classic class-imbalance problem where the number of fraud transactions is much lesser than the number of legitimate transaction for any bank. Most of the approaches involve building model on such imbalanced data, and thus fails to produce results on real-time new data because of overfitting on training data and a bias towards the majoritarian class of legitimate transactions. Thus, we can see this as an anomaly detection problem.
-
-1. At what time does the Credit Card Frauds usually take place?
-2. What are the general trends of amounts for Credit Card Fraud Transactions?
-3. How do we balance the data to not let the model overfit on legitimate transactions?
-4. Are the links an important weight to determine the output?
-5. Is the profession important?
-6. How to reprocess the data?
+Welcome to the Credit Card Fraud Detection System! This is a project aimed at detecting and preventing fraudulent transactions 
+in financial institutions. The system uses statistical and machine learning techniques to analyze credit card transactions and 
+identify potential fraudulent activities. It also incorporates a URL feature to improve its ability to detect new and emerging 
+forms of fraud, such as phishing and phone fraud. The system is designed using the Domain-Driven Design (DDD) principles and 
+has four main layers: Presentation, Application, Domain, and Infrastructure. Each layer has its own set of classes and 
+interfaces that communicate with the other layers. The system aims to adhere in the future to banking security standards 
+such as ISO 27001 and the Payment Card Industry Data Security Standard (PCI DSS) to ensure the security and privacy of 
+user data. The system is scalable, maintainable, and deployable on cloud platforms such as render.com.
 
 # Datasets
 
