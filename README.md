@@ -30,7 +30,7 @@ Requirements
 2. Enter a URL or a credit card number and click the "Detect" button.
 3. Wait for the prediction result to appear on the screen.
 
-## To do
+## Database
 
 The system uses a database to store user data and credit card information. For this project, we have generated synthetic data using the Sparkov Data Generation tool developed by B. Harris [1]. In addition, we have used a publicly available dataset of phishing URLs from Kaggle, developed by A. Mahmoud [2], to train our prediction model.
 
@@ -51,7 +51,7 @@ References:
 
 All your files and folders are presented as a tree in the file explorer. You can switch from one to another by clicking a file in the tree.
 
-## Installation
+## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
 
