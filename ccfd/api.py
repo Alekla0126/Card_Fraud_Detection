@@ -10,6 +10,8 @@ import requests
 
 # Load the trained model
 model = tf.keras.models.load_model('LSTM.h5')
+# Create a new instance of the Adagrad optimizer
+optimizer = Adagrad(learning_rate=0.01)
 
 # Initialize the tokenizer, stemmer, and vectorizer.
 tokenizer = RegexpTokenizer(r'[A-Za-z]+')
