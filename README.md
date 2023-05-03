@@ -11,12 +11,12 @@ user data. The system is scalable, maintainable, and deployable on cloud platfor
 
 # Requirements
 
-- Requirements
+Requirements
 - Python 3.7 or later
-- Flask 2.0 or later
-- TensorFlow 2.6 or later
-- scikit-learn 1.0 or later
-- requests 2.26 or later
+- [Flask](https://flask.palletsprojects.com/) 2.0 or later ![Flask icon](https://img.shields.io/badge/-Flask-grey?logo=flask)
+- [TensorFlow](https://www.tensorflow.org/) 2.6 or later ![TensorFlow icon](https://img.shields.io/badge/-TensorFlow-grey?logo=tensorflow)
+- [scikit-learn](https://scikit-learn.org/) 1.0 or later ![scikit-learn icon](https://img.shields.io/badge/-scikit_learn-grey?logo=scikit-learn)
+- [requests](https://docs.python-requests.org/) 2.26 or later ![requests icon](https://img.shields.io/badge/-requests-grey?logo=requests)
 
 ## Installation
 
