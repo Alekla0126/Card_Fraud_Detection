@@ -32,6 +32,23 @@ user data. The system is scalable, maintainable, and deployable on cloud platfor
 
 ## To do
 
+The system uses a database to store user data and credit card information. For this project, we have generated synthetic data using the Sparkov Data Generation tool developed by B. Harris [1]. In addition, we have used a publicly available dataset of phishing URLs from Kaggle, developed by A. Mahmoud [2], to train our prediction model.
+
+The database is implemented using SQLite, a lightweight and easy-to-use relational database management system. The database schema is designed using Object Relational Mapping (ORM) principles to allow for easy integration with the Domain layer of the system.
+
+The database schema includes tables for storing user information, credit card information, and predicted results. The user table includes fields for storing user ID, name, and email. The credit card table includes fields for storing credit card number, expiration date, and CVV. The predicted results table includes fields for storing the URL, prediction result, and timestamp.
+
+Overall, the use of a database allows for efficient storage and retrieval of user data and predictions, making the system more scalable and maintainable.
+
+References:
+
+[1] Harris, B. "Sparkov Data Generation." GitHub, 03-May-2023. [Online]. Available: https://github.com/namebrandon/Sparkov_Data_Generation.
+
+[2] Mahmoud, A. "Phishing URL Detection." Kaggle, 03-May-2023. [Online]. Available: https://www.kaggle.com/code/ahmedxmahmoud/phishing-url-detection/input.
+
+
+## To do
+
 All your files and folders are presented as a tree in the file explorer. You can switch from one to another by clicking a file in the tree.
 
 ## Installation
@@ -45,7 +62,6 @@ You can delete the current file by clicking the **Remove** button in the file ex
 ## Export a file
 
 You can export the current file by clicking **Export to disk** in the menu. You can choose to export the file as plain Markdown, as HTML using a Handlebars template or as a PDF.
-
 
 # Synchronization
 
