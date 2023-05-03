@@ -1,118 +1,149 @@
-Youtube Downloader API
+# Credit Card Fraud detection
 
-This API allows you to download Youtube videos and playlists in different resolutions and formats, and optionally download subtitles.
+Credit Card Fraud Detection is a classic class-imbalance problem where the number of fraud transactions is much lesser than the number of legitimate transaction for any bank. Most of the approaches involve building model on such imbalanced data, and thus fails to produce results on real-time new data because of overfitting on training data and a bias towards the majoritarian class of legitimate transactions. Thus, we can see this as an anomaly detection problem.
 
-Installation
+1. At what time does the Credit Card Frauds usually take place?
+2. What are the general trends of amounts for Credit Card Fraud Transactions?
+3. How do we balance the data to not let the model overfit on legitimate transactions?
+4. Are the links an important weight to determine the output?
+5. Is the profession important?
+6. How to reprocess the data?
 
-Clone this repository to your local machine.
-Install the required packages by running pip install -r requirements.txt
-
-. Run the API by running python app.py
-. Usage Download a video Send a POST request to /download with the following JSON data:
-
- {
-    "url": "https://www.youtube.com/watch?v=JkORjCt2VhQ",
-    "format": "high",
-    "subtitles": "False"
-}
-
-. url: The URL of the Youtube video you want to download. format: The format of the video you want to download. Valid values are mp4, low, medium, high, and mp3
-. subtitles: Whether to download subtitles for the video. Valid values are True and False
-. If the video has subtitles and 
-subtitles is set to True , the API will return the video file and subtitle file as attachments. Otherwise, the API will return only the video file as an attachment.
-
-If the video does not have subtitles and subtitles is set to True, the API will return a JSON response with the following message:
-
-{
-    "message": "This video does not have subtitles."
-}
-
-Download a playlist
-
-Send a POST request to /download_playlist with the following JSON data:
-
-{
-    "url": "https://www.youtube.com/playlist?list=PLwVUbPpIRn1QxqZz0x9Zt-dNHQVJzJGZ_",
-    "format": "high",
-    "subtitles": "False"
-}
-
-url: The URL of the Youtube playlist you want to download. 
-format : The format of the videos in the playlist you want to download. Valid values are mp4, low, medium, high, and mp3.
-subtitles: Whether to download subtitles for the videos in the playlist. Valid values are True and False The API will create a directory for the playlist and download each video in the playlist to that directory. If all videos in the playlist are downloaded successfully, the API will create a zip file of the playlist directory and return it as an attachment.
-
-If one or more videos in the playlist do not have subtitles and subtitles is set to True, the API will return a JSON response with the following message:
-
-{
-    "message": "One or more videos in this playlist do not have subtitles."
-}
-
-Examples
-
-Download a video in the highest resolution and without subtitles
-Request:
-
-{
-    "url": "https://www.youtube.com/watch?v=JkORjCt2VhQ",
-    "format": "high",
-    "subtitles": "False"
-}
-
-Response:
-The video file is downloaded as an attachment.
-
-Download a video in the low resolution and with subtitles
-Request:
-
-{
-    "url": "https://www.youtube.com/watch?v=JkORjCt2VhQ",
-    "format": "low",
-    "subtitles": "True"
-}
-
-Response:
-The video file and subtitle file are downloaded as attachments.
-
-Download a video in the medium resolution and with subtitles, but the video does not have subtitles
-Request:
-
-{
-    "url": "https://www.youtube.com/watch?v=JkORjCt2VhQ",
-    "format": "medium",
-    "subtitles": "True"
-}
-
-Response:
-
-{
-    "message": "This video does not have subtitles."
-}
-
-Download a playlist in the highest resolution and without subtitles
-Request:
-
-{
-    "url": "https://www.youtube.com/playlist?list=PLwVUbPpIRn1QxqZz0x9Zt-dNHQVJzJGZ_",
-    "format": "high",
-    "subtitles": "False"
-}
-
-Response: The zip file of the playlist directory is downloaded as an attachment.
-
-Download a playlist in the medium resolution and with subtitles, but one or more videos in the playlist do not have subtitles
-
-Request:
-{
-    "url": "https://www.youtube.com/playlist?list=PLwVUbPpIRn1QxqZz0x9Zt-dNHQVJzJGZ_",
-    "format": "medium",
-    "subtitles": "True"
-}
-
-Response:
-{
-    "message": "One or more videos in this playlist do not have subtitles."
-}
+# Datasets
 
 
-License
-This project is licensed under the MIT
+
+## How to run?
+
+The file explorer is accessible using the button in left corner of the navigation bar. You can create a new file by clicking the **New file** button in the file explorer. You can also create folders by clicking the **New folder** button.
+
+## To do
+
+All your files and folders are presented as a tree in the file explorer. You can switch from one to another by clicking a file in the tree.
+
+## Rename a file
+
+You can rename the current file by clicking the file name in the navigation bar or by clicking the **Rename** button in the file explorer.
+
+## Delete a file
+
+You can delete the current file by clicking the **Remove** button in the file explorer. The file will be moved into the **Trash** folder and automatically deleted after 7 days of inactivity.
+
+## Export a file
+
+You can export the current file by clicking **Export to disk** in the menu. You can choose to export the file as plain Markdown, as HTML using a Handlebars template or as a PDF.
+
+
+# Synchronization
+
+Synchronization is one of the biggest features of StackEdit. It enables you to synchronize any file in your workspace with other files stored in your **Google Drive**, your **Dropbox** and your **GitHub** accounts. This allows you to keep writing on other devices, collaborate with people you share the file with, integrate easily into your workflow... The synchronization mechanism takes place every minute in the background, downloading, merging, and uploading file modifications.
+
+There are two types of synchronization and they can complement each other:
+
+- The workspace synchronization will sync all your files, folders and settings automatically. This will allow you to fetch your workspace on any other device.
+	> To start syncing your workspace, just sign in with Google in the menu.
+
+- The file synchronization will keep one file of the workspace synced with one or multiple files in **Google Drive**, **Dropbox** or **GitHub**.
+	> Before starting to sync files, you must link an account in the **Synchronize** sub-menu.
+
+## Open a file
+
+You can open a file from **Google Drive**, **Dropbox** or **GitHub** by opening the **Synchronize** sub-menu and clicking **Open from**. Once opened in the workspace, any modification in the file will be automatically synced.
+
+## Save a file
+
+You can save any file of the workspace to **Google Drive**, **Dropbox** or **GitHub** by opening the **Synchronize** sub-menu and clicking **Save on**. Even if a file in the workspace is already synced, you can save it to another location. StackEdit can sync one file with multiple locations and accounts.
+
+## Synchronize a file
+
+Once your file is linked to a synchronized location, StackEdit will periodically synchronize it by downloading/uploading any modification. A merge will be performed if necessary and conflicts will be resolved.
+
+If you just have modified your file and you want to force syncing, click the **Synchronize now** button in the navigation bar.
+
+> **Note:** The **Synchronize now** button is disabled if you have no file to synchronize.
+
+## Manage file synchronization
+
+Since one file can be synced with multiple locations, you can list and manage synchronized locations by clicking **File synchronization** in the **Synchronize** sub-menu. This allows you to list and remove synchronized locations that are linked to your file.
+
+
+# Publication
+
+Publishing in StackEdit makes it simple for you to publish online your files. Once you're happy with a file, you can publish it to different hosting platforms like **Blogger**, **Dropbox**, **Gist**, **GitHub**, **Google Drive**, **WordPress** and **Zendesk**. With [Handlebars templates](http://handlebarsjs.com/), you have full control over what you export.
+
+> Before starting to publish, you must link an account in the **Publish** sub-menu.
+
+## Publish a File
+
+You can publish your file by opening the **Publish** sub-menu and by clicking **Publish to**. For some locations, you can choose between the following formats:
+
+- Markdown: publish the Markdown text on a website that can interpret it (**GitHub** for instance),
+- HTML: publish the file converted to HTML via a Handlebars template (on a blog for example).
+
+## Update a publication
+
+After publishing, StackEdit keeps your file linked to that publication which makes it easy for you to re-publish it. Once you have modified your file and you want to update your publication, click on the **Publish now** button in the navigation bar.
+
+> **Note:** The **Publish now** button is disabled if your file has not been published yet.
+
+## Manage file publication
+
+Since one file can be published to multiple locations, you can list and manage publish locations by clicking **File publication** in the **Publish** sub-menu. This allows you to list and remove publication locations that are linked to your file.
+
+
+# Markdown extensions
+
+StackEdit extends the standard Markdown syntax by adding extra **Markdown extensions**, providing you with some nice features.
+
+> **ProTip:** You can disable any **Markdown extension** in the **File properties** dialog.
+
+
+## SmartyPants
+
+SmartyPants converts ASCII punctuation characters into "smart" typographic punctuation HTML entities. For example:
+
+|                |ASCII                          |HTML                         |
+|----------------|-------------------------------|-----------------------------|
+|Single backticks|`'Isn't this fun?'`            |'Isn't this fun?'            |
+|Quotes          |`"Isn't this fun?"`            |"Isn't this fun?"            |
+|Dashes          |`-- is en-dash, --- is em-dash`|-- is en-dash, --- is em-dash|
+
+
+## KaTeX
+
+You can render LaTeX mathematical expressions using [KaTeX](https://khan.github.io/KaTeX/):
+
+The *Gamma function* satisfying $\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$ is via the Euler integral
+
+$$
+\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.
+$$
+
+> You can find more information about **LaTeX** mathematical expressions [here](http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference).
+
+
+## UML diagrams
+
+You can render UML diagrams using [Mermaid](https://mermaidjs.github.io/). For example, this will produce a sequence diagram:
+
+```mermaid
+sequenceDiagram
+Alice ->> Bob: Hello Bob, how are you?
+Bob-->>John: How about you John?
+Bob--x Alice: I am good thanks!
+Bob-x John: I am good thanks!
+Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
+
+Bob-->Alice: Checking with John...
+Alice->John: Yes... John, how are you?
+```
+
+And this will produce a flow chart:
+
+```mermaid
+graph LR
+A[Square Rect] -- Link text --> B((Circle))
+A --> C(Round Rect)
+B --> D{Rhombus}
+C --> D
+```
