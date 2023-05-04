@@ -2,6 +2,7 @@
 *.csv
 # Ignore the directory with the datasets
 /Datasets
+/ccfd/api.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
