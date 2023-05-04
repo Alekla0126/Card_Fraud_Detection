@@ -3,15 +3,19 @@ from sklearn.feature_extraction.text import CountVectorizer
 from flask import Flask, jsonify, request, render_template
 from nltk.stem.snowball import SnowballStemmer
 from nltk.tokenize import RegexpTokenizer
+from keras.models import load_model
 import tensorflow as tf
 import pandas as pd
 import numpy as np
 import requests
 
-# Load the trained model
-model = tf.keras.models.load_model('LSTM.h5')
-# Create a new instance of the Adagrad optimizer
-optimizer = Adagrad(learning_rate=0.01)
+# Define your custom optimizer
+class Adagrad(tf.keras.optimizers.Optimizer):
+    # Your custom implementation here
+    pass
+
+# Load your model with the custom optimizer
+model = load_model('LSTM.h5', custom_objects={'Adagrad': Adagrad})
 
 # Initialize the tokenizer, stemmer, and vectorizer.
 tokenizer = RegexpTokenizer(r'[A-Za-z]+')
