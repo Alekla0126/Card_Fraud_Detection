@@ -124,7 +124,6 @@ input[type="submit"]:hover {
     }
 
     h1 {
-        font-size: 4
-    .5vh;
-}
+        font-size: 4 .5vh;
+    }
 }

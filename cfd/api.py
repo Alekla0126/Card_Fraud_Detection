@@ -101,7 +101,7 @@ def predict():
 
         # Make the prediction.
         prediction = model.predict(input_df)
-        prediction_class = int((prediction > .2).astype(int))
+        prediction_class = int((prediction > .5).astype(int))
         print(prediction_class)
 
         # Check if the URL is in the Safe Browsing database.
