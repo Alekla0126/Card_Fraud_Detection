@@ -1,9 +1,18 @@
 body,
 html {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23007BFF"/></svg>');
+    background-image: linear-gradient(to bottom right,
+            #33a1fd,
+            /* Start color */
+            #408aef,
+            #4e6ef5,
+            /* Middle colors */
+            #6172cb,
+            #7376a1,
+            #c32f5e,
+            #b1274e);
     background-repeat: no-repeat;
-    background-size: 30% auto;
-    background-position: center; 
+    background-size: 100% auto;
+    background-position: center;
     font-family: 'Roboto Condensed', sans-serif;
     margin: 0;
     padding: 0;
@@ -15,7 +24,7 @@ html {
     background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
     backdrop-filter: blur(3px);
     border-radius: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 2);
     margin: auto;
     max-width: 500px;
     width: 90%;
@@ -73,9 +82,9 @@ input[type="text"] {
 }
 
 input[type="submit"] {
-    background-color: #5BC3A3;
+    background-color: #37836c;
     border: none;
-    border-radius: 10px;
+    border-radius: 20px;
     color: #FFF;
     cursor: pointer;
     font-family: 'Roboto', sans-serif;
@@ -87,7 +96,7 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: #44957F;
+    background-color: #2e6858;
 }
 
 @media screen and (min-width: 600px) {
