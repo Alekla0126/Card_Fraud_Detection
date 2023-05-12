@@ -1,5 +1,6 @@
 body,
 html {
+    background-color: #ffffff;
     background-repeat: no-repeat;
     background-size: 100% auto;
     background-position: center;
@@ -8,6 +9,15 @@ html {
     padding: 0;
     font-weight: 300;
     height: 100%;
+}
+
+.green-bubble {
+    position: absolute;
+    background-image: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%);
+    border-radius: 50%;
+    width: 5%;
+    height: 5%;
+    opacity: 0.8;
 }
 
 .card {
