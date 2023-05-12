@@ -1,15 +1,5 @@
 body,
 html {
-    background-image: linear-gradient(to bottom right,
-            #33a1fd,
-            /* Start color */
-            #408aef,
-            #4e6ef5,
-            /* Middle colors */
-            #6172cb,
-            #7376a1,
-            #c32f5e,
-            #b1274e);
     background-repeat: no-repeat;
     background-size: 100% auto;
     background-position: center;
