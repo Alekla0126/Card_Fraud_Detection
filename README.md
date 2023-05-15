@@ -17,7 +17,7 @@ Requirements
 
 ## Installation
 
-1. Clone the repository: git clone https://github.com/Alekla0126/Credit-Card-Fraud-Detection
+1. Clone the repository: git clone https://github.com/Alekla0126/Card-Fraud-Detection
 2. Install the required packages: pip install -r requirements.txt
 3. Run the application: python app.py
 
