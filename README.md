@@ -1,4 +1,4 @@
-# Credit Card Fraud detection
+# Card Fraud detection
 
 Welcome to the Credit Card Fraud Detection System! This is a project aimed at detecting and preventing fraudulent transactions 
 in financial institutions. The system uses statistical and machine learning techniques to analyze credit card transactions and 
