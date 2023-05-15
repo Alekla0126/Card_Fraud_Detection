@@ -29,13 +29,9 @@ Requirements
 
 ## Database
 
-The system uses a database to store user data and credit card information. For this project, we have generated synthetic data using the Sparkov Data Generation tool developed by B. Harris [1]. In addition, we have used a publicly available dataset of phishing URLs from Kaggle, developed by A. Mahmoud [2], to train our prediction model.
+The system uses a database to store user data and credit card information. For this project, synthetic data using the Sparkov Data Generation tool developed by B. Harris [1] was generated. In addition, a publicly available dataset of phishing URLs from Kaggle, developed by A. Mahmoud [2], to train our prediction model was used.
 
-The database is implemented using SQLite, a lightweight and easy-to-use relational database management system. The database schema is designed using Object Relational Mapping (ORM) principles to allow for easy integration with the Domain layer of the system.
-
-The database schema includes tables for storing user information, credit card information, and predicted results. The user table includes fields for storing user ID, name, and email. The credit card table includes fields for storing credit card number, expiration date, and CVV. The predicted results table includes fields for storing the URL, prediction result, and timestamp.
-
-Overall, the use of a database allows for efficient storage and retrieval of user data and predictions, making the system more scalable and maintainable.
+The database schema includes tables for storing user information, credit card information, and predicted results. The predicted results table includes fields for storing the URL, prediction result, and timestamp.
 
 References:
 
