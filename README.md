@@ -29,9 +29,9 @@ Requirements
 
 ## Database
 
-The system uses does not store user data and credit card information. For this project, synthetic data using the Sparkov Data Generation tool developed by B. Harris [1] was generated. In addition, a publicly available dataset of phishing URLs from Kaggle, developed by A. Mahmoud [2], to train the prediction model was used.
+The system does not store any user data or credit card information. For this project, synthetic data was generated using the Sparkov Data Generation tool developed by B. Harris [1]. The tool helps generate artificial data that resembles real data without containing any real user information or credit card details. Additionally, a publicly available dataset of phishing URLs from Kaggle, developed by A. Mahmoud [2], was used to train the prediction model.
 
-The database schema includes tables for storing user information, credit card information, and predicted results. The predicted results table includes fields for storing the URL, prediction result, and timestamp.
+The database schema includes JSON for temporary storage during runtime but does not persistently store any user information, credit card information, or the generated synthetic data. It primarily consists of a predicted results table with fields for storing the URL, prediction result, and timestamp. This table serves the purpose of capturing the results of the prediction model for analysis and monitoring.
 
 References:
 
