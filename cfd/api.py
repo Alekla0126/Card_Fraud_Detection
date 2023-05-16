@@ -71,18 +71,13 @@ def predict():
         # input_df['merchant'] = input_df['merchant'].astype('string')
         # input_df['job'] = input_df['job'].astype('string')
         # Convert the column to float.
-        print(input_df['zip'])
         input_df['zip'] = input_df['zip'].astype(float) 
-        print(input_df['zip'])
         input_df['lat'] = input_df['lat'].astype(float)
         input_df['long'] = input_df['long'].astype(float)
         input_df['url'] = input_df['url'].astype('string')
         input_df['text_tokenized'] = input_df['text_tokenized'].astype('string')
         input_df['text_stemmed'] = input_df['text_stemmed'].astype('string')
         input_df['text_sent'] = input_df['text_sent'].astype('string') 
-
-
-        print(input_df.shape)
 
         # Encode the categorical features.
         enc.fit(input_df.loc[:,['category','merchant','job', 'url', 'text_tokenized', 'text_stemmed', 'text_sent']])
