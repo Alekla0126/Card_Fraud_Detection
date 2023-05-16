@@ -1,13 +1,10 @@
-# Credit Card Fraud detection
+# Card Fraud detection
 
 Welcome to the Credit Card Fraud Detection System! This is a project aimed at detecting and preventing fraudulent transactions 
 in financial institutions. The system uses statistical and machine learning techniques to analyze credit card transactions and 
 identify potential fraudulent activities. It also incorporates a URL feature to improve its ability to detect new and emerging 
 forms of fraud, such as phishing and phone fraud. The system is designed using the Domain-Driven Design (DDD) principles and 
-has four main layers: Presentation, Application, Domain, and Infrastructure. Each layer has its own set of classes and 
-interfaces that communicate with the other layers. The system aims to adhere in the future to banking security standards 
-such as ISO 27001 and the Payment Card Industry Data Security Standard (PCI DSS) to ensure the security and privacy of 
-user data. The system is scalable, maintainable, and deployable on cloud platforms such as render.com.
+has four main layers: Presentation, Application, Domain, and Infrastructure. The system aims to adhere in the future to banking security standards such as ISO 27001 and the Payment Card Industry Data Security Standard (PCI DSS) to ensure the security and privacy of user data. The system is scalable, maintainable, and deployable on cloud platforms such as render.com.
 
 # Requirements
 
@@ -20,7 +17,7 @@ Requirements
 
 ## Installation
 
-1. Clone the repository: git clone https://github.com/Alekla0126/Credit-Card-Fraud-Detection
+1. Clone the repository: git clone https://github.com/Alekla0126/Card-Fraud-Detection
 2. Install the required packages: pip install -r requirements.txt
 3. Run the application: python app.py
 
@@ -32,13 +29,9 @@ Requirements
 
 ## Database
 
-The system uses a database to store user data and credit card information. For this project, we have generated synthetic data using the Sparkov Data Generation tool developed by B. Harris [1]. In addition, we have used a publicly available dataset of phishing URLs from Kaggle, developed by A. Mahmoud [2], to train our prediction model.
+The system does not store any user data or credit card information. For this project, synthetic data was generated using the Sparkov Data Generation tool developed by B. Harris [1]. The tool helps generate artificial data that resembles real data without containing any real user information or credit card details. Additionally, a publicly available dataset of phishing URLs from Kaggle, developed by A. Mahmoud [2], was used to train the prediction model.
 
-The database is implemented using SQLite, a lightweight and easy-to-use relational database management system. The database schema is designed using Object Relational Mapping (ORM) principles to allow for easy integration with the Domain layer of the system.
-
-The database schema includes tables for storing user information, credit card information, and predicted results. The user table includes fields for storing user ID, name, and email. The credit card table includes fields for storing credit card number, expiration date, and CVV. The predicted results table includes fields for storing the URL, prediction result, and timestamp.
-
-Overall, the use of a database allows for efficient storage and retrieval of user data and predictions, making the system more scalable and maintainable.
+The database schema includes JSON for temporary storage during runtime but does not persistently store any user information, credit card information, or the generated synthetic data. It primarily consists of a predicted results table with fields for storing the URL, prediction result, and timestamp. This table serves the purpose of capturing the results of the prediction model for analysis and monitoring.
 
 References:
 
