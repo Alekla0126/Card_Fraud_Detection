@@ -41,13 +41,11 @@ References:
 
 ## DDD
 
-![Flow](assets/DDD_ccfd.png)
+![DDD](assests/DDD_ccfd.png)
 
 ## To do
 
 - Finish the text.
-- Add DDD diagram.
-
 - Add flow chart
 
 ## License
