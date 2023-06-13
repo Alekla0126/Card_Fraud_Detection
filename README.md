@@ -39,12 +39,15 @@ References:
 
 [2] Mahmoud, A. "Phishing URL Detection." Kaggle, 03-May-2023. [Online]. Available: https://www.kaggle.com/code/ahmedxmahmoud/phishing-url-detection/input.
 
+## DDD
+
+![Flow](assets/DDD_ccfd.png)
 
 ## To do
 
-- Add the link with the db.
 - Finish the text.
 - Add DDD diagram.
+
 - Add flow chart
 
 ## License
