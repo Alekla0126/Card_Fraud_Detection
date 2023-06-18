@@ -5,15 +5,13 @@ from nltk.stem.snowball import SnowballStemmer
 from nltk.tokenize import RegexpTokenizer
 from keras.optimizers import Adagrad
 from keras.models import load_model
+from config import API_KEY
 import tensorflow as tf
 import pandas as pd
 import numpy as np
 import traceback
 import requests
 import os
-
-
-API_KEY = 'AIzaSyC1H2IiSrQ7UqByfQobOVOxN6_0XsC9Fow'
 
 # Load your model with the custom optimizer.
 model = load_model('LSTM.h5', custom_objects={'Adagrad': Adagrad})
