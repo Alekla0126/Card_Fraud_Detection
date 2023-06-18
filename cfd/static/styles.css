@@ -1,142 +1,110 @@
-body,
+@import url(https://fonts.googleapis.com/css?family=Inter:100,200,300,regular,500,600,700,800,900);
+
+:root {
+  --width: 85%;
+  --padding: var(--width) / 2;
+}
+
 html {
-    background-repeat: no-repeat;
-    background-size: 100% auto;
-    background-position: center;
-    font-family: 'Roboto Condensed', sans-serif;
-    margin: 0;
-    padding: 0;
-    font-weight: 300;
-    height: 100%;
-    background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+  width: full;
+  height: full;
+  background-color: #f7f7f7;
 }
 
-.green-bubble {
-    position: absolute;
-    background-color: #3a579a;
-    border-radius: 50%;
-    width: 20%;
-    height: 20%;
-    opacity: 0.8;
-    aspect-ratio: 1 / 1;
-}
-
-.card {
-    background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
-    backdrop-filter: blur(3px);
-    border-radius: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 2);
-    margin: auto;
-    max-width: 500px;
-    width: 90%;
-    padding: 2vh 10px;
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-h1 {
-    color: #0f0f0f;
-    font-size: 3vh;
-    font-weight: 700;
-    margin: 0;
-    padding: 1vh;
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
+body {
+  display: grid;
+  place-items: center;
 }
 
 form {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 2vh;
-    overflow-y: auto;
-    flex: 1;
+  padding: 1.5rem 1.5rem 0rem 1.5rem;
 }
 
+@media screen and (max-width: 600px) {
+  form {
+    padding: 1rem;
+  }
+}
+
+form div {
+  display: grid;
+  place-items: center;
+  grid-template-columns: 15% 84%;
+  gap: 0.5rem;
+}
+
+@media screen and (max-width: 600px) {
+  form div {
+    grid-template-columns: 25% 75%;
+  }
+}
+
+h1 {
+  margin-top: 1.5rem !important;
+  margin-bottom: 0 !important;
+  text-align: center !important;
+  font-family: Inter !important;
+}
+
+input,
 label {
-    flex-basis: 100%;
-    font-size: 1.5vh;
-    font-weight: 400;
-    margin-top: 1vh;
-    margin-bottom: 0.5vh;
-    font-weight: normal;
+  border-radius: 30px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  font-family: Inter !important;
 }
 
-input[type="text"] {
-    background-color: transparent;
-    border: none;
-    border-bottom: 2px solid #393939;
-    color: #393939;
-    font-family: 'Roboto', sans-serif;
-    font-size: 2vh;
-    margin: 0.5vh 0;
-    padding: 0.5vh;
-    opacity: 0.8;
-    flex-basis: 100%;
-    height: 2.5vh;
+input[type='submit'] {
+  margin: 2rem auto 0 !important;
+  width: 100% !important;
+  display: block !important;
+
+  --background-color: #5568af !important;
+  --border-color: #4b5c9a !important;
+  --color: var(--primary-inverse);
 }
 
-input[type="submit"] {
-    background-color: #536bcd;
-    border: none;
-    border-radius: 20px;
-    color: #FFF;
-    cursor: pointer;
-    font-family: 'Roboto', sans-serif;
-    font-size: 3vh;
-    margin-top: 2vh;
-    padding: 1vh 2vh;
-    transition: background-color 0.3s ease-in-out;
-    flex-basis: 100%;
+.card {
+  position: relative;
+  margin: 2rem auto;
+  backdrop-filter: blur(2px) saturate(200%);
+  background-color: rgba(236, 236, 236, 0.75);
+  border-radius: 12px;
+  border: 1px solid rgba(209, 213, 219, 0.3);
 }
 
-input[type="submit"]:hover {
-    background-color: #2d33a5;
+.balls {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 10rem;
+  width: 75%;
+  margin: 0 auto;
 }
 
-@media screen and (min-width: 600px) {
-    input[type="text"] {
-        font-size: 1.5vh;
-    }
-
-    label {
-        font-size: 1vh;
-    }
-
-    h1 {
-        font-size: 2.5vh;
-    }
+.balls div {
+  border-radius: 100%;
 }
 
-@media screen and (min-width: 900px) {
-    input[type="text"] {
-        font-size: 2vh;
-    }
-
-    label {
-        font-size: 1.5vh;
-    }
-
-    h1 {
-        font-size: 3.5vh;
-    }
+.balls div:nth-of-type(1) {
+  margin-top: -30em;
+  margin-right: -15rem;
+  position: relative;
+  z-index: 999;
+  width: 30rem;
+  height: 30rem;
+  background-color: #6ebf9b;
+  align-self: end;
 }
 
-@media screen and (min-width: 1200px) {
-    input[type="text"] {
-        font-size: 2.5vh;
-    }
+.balls div:nth-of-type(2) {
+  width: 20rem;
+  height: 20rem;
+  background-color: #5568af;
+}
 
-    label {
-        font-size: 2vh;
-    }
-
-    h1 {
-        font-size: 4.5vh;
-    }
+@media screen and (max-width: 600px) {
+  .balls div:nth-of-type(1) {
+    z-index: -10;
+  }
 }

@@ -1,43 +1,49 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<title>Credit Card Fraud Detector</title>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-	<link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
-</head>
-<body>
-	<div class="card">
-		<h1>Enter data for prediction</h1>
-		<form action="/predict" method="POST">
-			<label for="hour_of_day">Hour of Day:</label>
-			<input type="text" id="hour_of_day" name="hour_of_day">
+<html data-theme="light">
+  <head>
+    <title>Credit Card Fraud Detector</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}" />
+    <!-- <link rel="stylesheet" href="../static/styles.css" /> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
+  </head>
+  <body>
+    <div class="balls">
+      <div></div>
+      <div></div>
+    </div>
+    <div class="card container">
+      <h1>Enter data for prediction</h1>
+      <form action="/predict" method="POST">
+        <div>
+          <label for="hour_of_day">Hour of Day:</label>
+          <input type="text" id="hour_of_day" name="hour_of_day" />
 
-			<label for="category">Category:</label>
-			<input type="text" id="category" name="category">
+          <label for="category">Category:</label>
+          <input type="text" id="category" name="category" />
 
-			<label for="amount">Amount (USD):</label>
-			<input type="text" id="amount(usd)" name="amount(usd)">
+          <label for="amount">Amount (USD):</label>
+          <input type="text" id="amount(usd)" name="amount(usd)" />
 
-			<label for="merchant">Merchant:</label>
-			<input type="text" id="merchant" name="merchant">
+          <label for="merchant">Merchant:</label>
+          <input type="text" id="merchant" name="merchant" />
 
-			<label for="job">Job:</label>
-			<input type="text" id="job" name="job">
-			
-			<label for="zip">Zip:</label>
-			<input type="text" id="zip" name="zip">
+          <label for="job">Job:</label>
+          <input type="text" id="job" name="job" />
 
-			<label for="lat">Latitude:</label>
-			<input type="text" id="lat" name="lat">
+          <label for="zip">Zip:</label>
+          <input type="text" id="zip" name="zip" />
 
-			<label for="long">Longitude:</label>
-			<input type="text" id="long" name="long">
+          <label for="lat">Latitude:</label>
+          <input type="text" id="lat" name="lat" />
 
-			<label for="url">URL:</label>
-			<input type="text" id="url" name="url">
+          <label for="long">Longitude:</label>
+          <input type="text" id="long" name="long" />
 
-			<input type="submit" value="Predict">
-		</form>
-	</div>
-</body>
+          <label for="url">URL:</label>
+          <input type="text" id="url" name="url" />
+        </div>
+        <input type="submit" value="Predict" />
+      </form>
+    </div>
+  </body>
 </html>
