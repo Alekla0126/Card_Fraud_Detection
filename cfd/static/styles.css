@@ -20,9 +20,9 @@ form {
   padding: 1.5rem 1.5rem 0rem 1.5rem;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
   form {
-    padding: 1rem;
+    padding: 0rem;
   }
 }
 
@@ -33,9 +33,10 @@ form div {
   gap: 0.5rem;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
   form div {
-    grid-template-columns: 25% 75%;
+    margin-top: 2rem;
+    grid-template-columns: 30% 68%;
   }
 }
 
@@ -72,6 +73,12 @@ input[type='submit'] {
   border: 1px solid rgba(209, 213, 219, 0.3);
 }
 
+@media screen and (max-width: 768px) {
+  .card {
+    margin: 0;
+  }
+}
+
 .balls {
   position: absolute;
   display: flex;
@@ -85,8 +92,15 @@ input[type='submit'] {
   border-radius: 100%;
 }
 
+@media screen and (max-width: 1270px) {
+  .balls div:nth-of-type(1) {
+    width: 20rem;
+    height: 20rem;
+  }
+}
+
 .balls div:nth-of-type(1) {
-  margin-top: -30em;
+  margin-top: -30rem;
   margin-right: -15rem;
   position: relative;
   z-index: 999;
@@ -102,12 +116,30 @@ input[type='submit'] {
   background-color: #5568af;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
+  .balls {
+    gap: 20rem;
+  }
+
   .balls div:nth-of-type(1) {
+    margin-top: -15rem;
+    margin-right: -2rem;
     z-index: -10;
+<<<<<<< HEAD
     margin-top: -15em;
     margin-right: auto;
     margin-left: auto;
+=======
+    position: absolute;
+    width: 10rem;
+    height: 10rem;
+  }
+
+  .balls div:nth-of-type(2) {
+    width: 10rem;
+    height: 10rem;
+    background-color: #5568af;
+>>>>>>> 30456927556053e0c4cd063610f24b7c8a85d05c
   }
 
   .balls {
