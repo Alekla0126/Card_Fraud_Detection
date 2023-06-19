@@ -11,19 +11,24 @@ import pandas as pd
 import numpy as np
 import traceback
 import requests
+import pickle
 import os
 
-# Load your model with the custom optimizer.
-model = load_model('LSTM.h5', custom_objects={'Adagrad': Adagrad})
-
+# Load categories.
+with open('encoded_categories.pkl', 'rb') as f:
+    encoded_categories = pickle.load(f)
+    
+# Load the saved scaler object
+with open('scaler.pkl', 'rb') as f:
+    scaler = pickle.load(f)
+    
 # Initialize the tokenizer, stemmer, and vectorizer.
 tokenizer = RegexpTokenizer(r'[A-Za-z]+')
 stemmer = SnowballStemmer('english')
 cv = CountVectorizer()
 
-# Initialize the ordinal encoder and scaler.
-enc = OrdinalEncoder(dtype=np.int64)
-scaler = StandardScaler()
+# Load your model with the custom optimizer.
+model = load_model('LSTM.h5', custom_objects={'Adagrad': Adagrad})
 
 #  Prepare the data for the model.
 def prepare_data(X):
@@ -45,12 +50,6 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-def check_numerical(value):
-    try:
-        return float(value)
-    except ValueError:
-        raise ValueError(f"Invalid input: {value} is not a number.")
-
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
@@ -70,7 +69,8 @@ def predict():
             'url': [input_data.get('url', '')],
         })
         
-        X, features = prepare_data(input_df)
+        # Stemmed text, tokenize and vectorize.
+        input_df, features = prepare_data(input_df)
 
         # Checking the format.
         input_df['hour_of_day'] = input_df['hour_of_day'].astype('string') 
@@ -85,30 +85,38 @@ def predict():
         input_df['url'] = input_df['url'].astype('string')
         input_df['text_tokenized'] = input_df['text_tokenized'].astype('string')
         input_df['text_stemmed'] = input_df['text_stemmed'].astype('string')
-        input_df['text_sent'] = input_df['text_sent'].astype('string') 
+        input_df['text_sent'] = input_df['text_sent'].astype('string')
 
+        print(input_df)
+        
+        
+        # Instantiate the encoder with the loaded categories
+        enc = OrdinalEncoder(categories=encoded_categories, dtype=np.int64) 
         # Encode the categorical features.
         enc.fit(input_df.loc[:,['category','merchant','job', 'url', 'text_tokenized', 'text_stemmed', 'text_sent']])
         # Transforming the categorical features into numerical.
         # Here are the parameters that we will use for the final model.
         input_df.loc[:, ['category','merchant','job', 'url', 'text_tokenized', 'text_stemmed', 'text_sent']] = enc.transform(input_df[['category','merchant','job', 'url', 'text_tokenized', 'text_stemmed', 'text_sent']])
 
+        print(input_df)
+
+        
+        # Print the mean and standard deviation values
+        print("Mean values:", scaler.mean_)
+        print("Standard deviation values:", scaler.scale_)
         # Scale the features.
-        scaler.fit(input_df)
-        # Transform the resampled features using the scaler.
+        cols = input_df.columns
         input_df = scaler.transform(input_df)
-        # The columns are passed.
-        cols = ['hour_of_day', 'category', 'amount(usd)', 'merchant', 'job', 'zip', 'lat', 'long', 'url', 'text_tokenized', 'text_stemmed', 'text_sent']
-        # Convert the numpy array to a pandas dataframe.
         input_df = pd.DataFrame(input_df, columns=cols)
+                
+        print(input_df)
         
         # Fomat for the LTSM model.
         # input_data = np.asarray(input_data).astype(np.float32)
 
         # Make the prediction.
         prediction = model.predict(input_df)
-        prediction_class = int((prediction > .40).astype(int))
-        print(prediction_class)
+        prediction_class = int((prediction >= .40).astype(int))
 
         # Check if the URL is in the Safe Browsing database.
         headers = {'Content-Type': 'application/json'}
