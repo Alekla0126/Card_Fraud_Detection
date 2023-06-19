@@ -5,6 +5,6 @@ nltk
 Flask
 tensorflow
 gunicorn
-protobuf
+protobuf>=3.19.0
 h5py
 keras
