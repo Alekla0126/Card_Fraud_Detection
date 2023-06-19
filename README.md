@@ -9,7 +9,7 @@ has four main layers: Presentation, Application, Domain, and Infrastructure. The
 # Requirements
 
 Requirements
-- [Flask](https://www.python.org/downloads/release/python-370/) Python 3.7 or later
+- [Python](https://www.python.org/downloads/release/python-370/) Python 3.7 or later
 - [Flask](https://flask.palletsprojects.com/) 2.0 or later ![Flask icon](https://img.shields.io/badge/-Flask-grey?logo=flask)
 - [TensorFlow](https://www.tensorflow.org/) 2.6 or later ![TensorFlow icon](https://img.shields.io/badge/-TensorFlow-grey?logo=tensorflow)
 - [scikit-learn](https://scikit-learn.org/) 1.0 or later ![scikit-learn icon](https://img.shields.io/badge/-scikit_learn-grey?logo=scikit-learn)
@@ -27,7 +27,7 @@ Requirements
 2. Enter a URL or a credit card number and click the "Detect" button.
 3. Wait for the prediction result to appear on the screen.
 
-## Database
+## Dataset
 
 The system does not store any user data or credit card information. For this project, synthetic data was generated using the Sparkov Data Generation tool developed by B. Harris [1]. The tool helps generate artificial data that resembles real data without containing any real user information or credit card details. Additionally, a publicly available dataset of phishing URLs from Kaggle, developed by A. Mahmoud [2], was used to train the prediction model.
 
