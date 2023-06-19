@@ -25,6 +25,19 @@ cv = CountVectorizer()
 enc = OrdinalEncoder(dtype=np.int64)
 scaler = StandardScaler()
 
+#  Prepare the data for the model.
+def prepare_data(X):
+    # Tokenize the text.
+    X['text_tokenized'] = X.url.map(lambda t: tokenizer.tokenize(t))
+    # Stem the text.
+    X['text_stemmed'] = X.text_tokenized.map(lambda t: [stemmer.stem(word) for word in t])
+    # Join the text.
+    X['text_sent'] = X.text_stemmed.map(lambda t: ' '.join(t))
+    # Vectorize the text.
+    features = cv.fit_transform(X.text_sent)
+    # Return the features and the target.
+    return X, features
+
 app = Flask(__name__)
 
 # Define the home page route.
@@ -42,7 +55,7 @@ def check_numerical(value):
 def predict():
     try:
         # Get the input data.
-        input_data = request.form.to_dict()
+        input_data = request.get_json()
 
         # Preprocess the input data.
         input_df = pd.DataFrame({
@@ -56,19 +69,16 @@ def predict():
             'long': [input_data.get('long', '')],
             'url': [input_data.get('url', '')],
         })
-
-        # Tokenize and stem the text.
-        input_df['text_tokenized'] = input_df['url'].apply(lambda t: tokenizer.tokenize(t))
-        input_df['text_stemmed'] = input_df['text_tokenized'].apply(lambda t: [stemmer.stem(word) for word in t])
-        input_df['text_sent'] = input_df['text_stemmed'].apply(lambda t: ' '.join(t))
+        
+        X, features = prepare_data(input_df)
 
         # Checking the format.
-        # input_df['hour_of_day'] = input_df['hour_of_day'].astype('string') 
-        # input_df['category'] = input_df['category'].astype('string')
-        # input_df['amount(usd)'] = input_df['amount(usd)'].astype('float64')
-        # input_df['merchant'] = input_df['merchant'].astype('string')
-        # input_df['job'] = input_df['job'].astype('string')
-        # Convert the column to float.
+        input_df['hour_of_day'] = input_df['hour_of_day'].astype('string') 
+        input_df['category'] = input_df['category'].astype('string')
+        input_df['amount(usd)'] = input_df['amount(usd)'].astype('float64')
+        input_df['merchant'] = input_df['merchant'].astype('string')
+        input_df['job'] = input_df['job'].astype('string')
+        # Convert the columns to float.
         input_df['zip'] = input_df['zip'].astype(float) 
         input_df['lat'] = input_df['lat'].astype(float)
         input_df['long'] = input_df['long'].astype(float)
@@ -91,10 +101,13 @@ def predict():
         cols = ['hour_of_day', 'category', 'amount(usd)', 'merchant', 'job', 'zip', 'lat', 'long', 'url', 'text_tokenized', 'text_stemmed', 'text_sent']
         # Convert the numpy array to a pandas dataframe.
         input_df = pd.DataFrame(input_df, columns=cols)
+        
+        # Fomat for the LTSM model.
+        # input_data = np.asarray(input_data).astype(np.float32)
 
         # Make the prediction.
         prediction = model.predict(input_df)
-        prediction_class = int((prediction > .5).astype(int))
+        prediction_class = int((prediction > .40).astype(int))
         print(prediction_class)
 
         # Check if the URL is in the Safe Browsing database.
@@ -135,4 +148,4 @@ def predict():
         return jsonify({'status': 'error', 'message': error_message})
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

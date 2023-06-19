@@ -55,13 +55,17 @@ label {
   font-family: Inter !important;
 }
 
-input[type='submit'] {
+button[type='submit'] {
   margin: 2rem auto 0 !important;
   width: 100% !important;
   display: block !important;
-  --background-color: #5568af !important;
-  --border-color: #4b5c9a !important;
-  --color: var(--primary-inverse);
+  background-color: #5568af !important;
+  border-color: #4b5c9a !important;
+  color: var(--primary-inverse);
+}
+
+button[type='submit']:hover {
+  background-color: green;
 }
 
 .card {
@@ -125,11 +129,6 @@ input[type='submit'] {
     margin-top: -15rem;
     margin-right: -2rem;
     z-index: -10;
-<<<<<<< HEAD
-    margin-top: -15em;
-    margin-right: auto;
-    margin-left: auto;
-=======
     position: absolute;
     width: 10rem;
     height: 10rem;
@@ -139,7 +138,6 @@ input[type='submit'] {
     width: 10rem;
     height: 10rem;
     background-color: #5568af;
->>>>>>> 30456927556053e0c4cd063610f24b7c8a85d05c
   }
 
   .balls {

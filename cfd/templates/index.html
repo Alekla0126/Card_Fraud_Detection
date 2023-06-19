@@ -2,7 +2,6 @@
 <html data-theme="light">
   <head>
     <title>Credit Card Fraud Detector</title>
-    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}" /> -->
     <link rel="stylesheet" href="../static/styles.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,7 +13,7 @@
     </div>
     <div class="card container">
       <h1>Enter data for prediction</h1>
-      <form action="/predict" method="POST">
+      <form id="prediction-form">
         <div>
           <label for="hour_of_day">Hour of Day:</label>
           <input type="text" id="hour_of_day" name="hour_of_day" />
@@ -23,7 +22,7 @@
           <input type="text" id="category" name="category" />
 
           <label for="amount">Amount (USD):</label>
-          <input type="text" id="amount(usd)" name="amount(usd)" />
+          <input type="text" id="amount" name="amount(usd)" />
 
           <label for="merchant">Merchant:</label>
           <input type="text" id="merchant" name="merchant" />
@@ -43,8 +42,42 @@
           <label for="url">URL:</label>
           <input type="text" id="url" name="url" />
         </div>
-        <input type="submit" value="Predict" />
+        <button type="submit">Predict</button>
       </form>
     </div>
+
+    <script>
+      document.getElementById("prediction-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        // Collect the form data
+        const formData = new FormData(this);
+
+        // Convert the form data to JSON
+        const jsonData = {};
+        for (const [key, value] of formData.entries()) {
+          jsonData[key] = value;
+        }
+
+        // Make the POST request to the predict endpoint
+        fetch("/predict", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(jsonData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Handle the response data
+            const safebrowsingResult = data.in_safebrowsing;
+            const predictionResult = data.prediction;
+            alert(`Safebrowsing: ${safebrowsingResult}\nPrediction: ${predictionResult}`);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      });
+    </script>
   </body>
 </html>
