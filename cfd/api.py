@@ -72,6 +72,7 @@ def predict():
         # Stemmed text, tokenize and vectorize.
         input_df, features = prepare_data(input_df)
 
+        
         # Checking the format.
         input_df['hour_of_day'] = input_df['hour_of_day'].astype('string') 
         input_df['category'] = input_df['category'].astype('string')
@@ -87,6 +88,7 @@ def predict():
         input_df['text_stemmed'] = input_df['text_stemmed'].astype('string')
         input_df['text_sent'] = input_df['text_sent'].astype('string')
 
+        print("After text processing: ")
         print(input_df)
         
         
@@ -98,17 +100,16 @@ def predict():
         # Here are the parameters that we will use for the final model.
         input_df.loc[:, ['category','merchant','job', 'url', 'text_tokenized', 'text_stemmed', 'text_sent']] = enc.transform(input_df[['category','merchant','job', 'url', 'text_tokenized', 'text_stemmed', 'text_sent']])
 
+        print("After encoding: ")
         print(input_df)
 
         
-        # Print the mean and standard deviation values
-        print("Mean values:", scaler.mean_)
-        print("Standard deviation values:", scaler.scale_)
         # Scale the features.
         cols = input_df.columns
         input_df = scaler.transform(input_df)
         input_df = pd.DataFrame(input_df, columns=cols)
                 
+        print("After scaling: ")
         print(input_df)
         
         # Fomat for the LTSM model.
@@ -156,4 +157,5 @@ def predict():
         return jsonify({'status': 'error', 'message': error_message})
 
 if __name__ == '__main__':
+    # Remove the debug=True parameter for production.
     app.run(debug=True)
