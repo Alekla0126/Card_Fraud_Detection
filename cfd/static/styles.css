@@ -61,6 +61,7 @@ button[type='submit'] {
   display: block !important;
   background-color: #5568af !important;
   border-color: #4b5c9a !important;
+  border-radius: 30px !important;
   color: var(--primary-inverse);
 }
 
