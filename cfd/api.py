@@ -158,4 +158,4 @@ def predict():
 
 if __name__ == '__main__':
     # Remove the debug=True parameter for production.
-    app.run(debug=True)
+    app.run()

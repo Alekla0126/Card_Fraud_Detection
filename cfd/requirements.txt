@@ -1,8 +1,10 @@
-scikit-learn
-flask
-nltk
-keras
-tensorflow
-pandas
+Flask
 numpy
+pandas
+scikit-learn
+nltk
+Keras
+tensorflow
 requests
+protobuf
+gunicorn
