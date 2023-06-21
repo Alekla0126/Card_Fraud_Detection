@@ -136,3 +136,5 @@ dmypy.json
 
 # API keys
 /cfd/config.py
+# Enviroment
+/cfd/.env
