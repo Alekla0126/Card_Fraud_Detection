@@ -41,7 +41,7 @@ References:
 
 ## DDD
 
-![DDD](assests/DDD_ccfd.png)
+![DDD](assets/DDD_ccfd.png)
 
 ## App deployment
 
