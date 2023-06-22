@@ -19,7 +19,9 @@ Requirements
 
 1. Clone the repository: git clone https://github.com/Alekla0126/Card-Fraud-Detection
 2. Install the required packages: pip install -r requirements.txt
-3. Run the application: python app.py
+3. Run the application: 
+- $ cd /cfd 
+- $ python app.py
 
 ## Local usage
 
@@ -51,8 +53,11 @@ References:
 
 ## To do
 
-[] Try with real data.
-[] Add a captcha.
+- [x] Deploy
+- [x] Test with synthetic data.
+- [] Test with real data.
+- [] Try with real data.
+- [] Add a captcha.
 
 ## License
 
