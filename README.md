@@ -47,7 +47,7 @@ References:
 
 ![WebApp](assets/WebApp.png)
 ![ConsoleLogs](assets/ConsoleLogs.png)
-![PostManRequests](assests/PostManRequests.png)
+![PostManRequests](assets/PostManRequests.png)
 
 ## To do
 
