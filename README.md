@@ -43,6 +43,12 @@ References:
 
 ![DDD](assests/DDD_ccfd.png)
 
+## App deployment
+
+![WebApp](assets/WebApp.png)
+![ConsoleLogs](assets/ConsoleLogs.png)
+![PostManRequests](assests/PostManRequests.png)
+
 ## To do
 
 - Finish the text.
