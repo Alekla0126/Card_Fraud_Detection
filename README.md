@@ -55,9 +55,9 @@ References:
 
 - [x] Deploy
 - [x] Test with synthetic data.
-- [] Test with real data.
-- [] Try with real data.
-- [] Add a captcha.
+- [ ] Test with real data.
+- [ ] Try with real data.
+- [ ] Add a captcha.
 
 ## License
 
