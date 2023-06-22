@@ -51,8 +51,8 @@ References:
 
 ## To do
 
-- Finish the text.
-- Add flow chart
+[] Try with real data.
+[] Add a captcha.
 
 ## License
 
