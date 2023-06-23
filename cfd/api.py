@@ -69,6 +69,9 @@ def predict():
             'url': [input_data.get('url', '')],
         })
         
+        # Check if the merchant starts with "fraud_" and add it if it doesn't.
+        input_df['merchant'] = input_df['merchant'].apply(lambda x: 'fraud_' + x if not x.startswith('fraud_') else x)
+        
         # Stemmed text, tokenize and vectorize.
         input_df, features = prepare_data(input_df)
 
