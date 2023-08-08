@@ -4,7 +4,7 @@ pandas
 scikit-learn
 nltk
 Keras
-tensorflow
+tensorflow-macos
 requests
 protobuf
 gunicorn
