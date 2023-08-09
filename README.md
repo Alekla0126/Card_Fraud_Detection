@@ -6,6 +6,8 @@ identify potential fraudulent activities. It also incorporates a URL feature to 
 forms of fraud, such as phishing and phone fraud. The system is designed using the Domain-Driven Design (DDD) principles and 
 has four main layers: Presentation, Application, Domain, and Infrastructure. The system aims to adhere in the future to banking security standards such as ISO 27001 and the Payment Card Industry Data Security Standard (PCI DSS) to ensure the security and privacy of user data. The system is scalable, maintainable, and deployable on cloud platforms such as Google Cloud.
 
+Live: https://cfd.onrender.com
+
 # Requirements
 
 Requirements
