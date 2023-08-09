@@ -5,7 +5,7 @@ from nltk.stem.snowball import SnowballStemmer
 from nltk.tokenize import RegexpTokenizer
 from keras.optimizers import Adagrad
 from keras.models import load_model
-from config import API_KEY
+# from config import API_KEY
 import tensorflow as tf
 import pandas as pd
 import numpy as np
