@@ -1,0 +1,10 @@
+Flask
+numpy
+pandas
+scikit-learn
+nltk
+Keras
+tensorflow-macos
+requests
+protobuf
+gunicorn
