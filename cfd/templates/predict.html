@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html data-theme="light">
+  <head>
+    <title>Credit Card Fraud Detector</title>
+    <link rel="stylesheet" href="../static/styles.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div class="balls">
+      <div></div>
+      <div></div>
+    </div>
+    <div class="card container">
+      <h1>Enter data for prediction</h1>
+      <form id="prediction-form">
+        <div>
+          <label for="hour_of_day">Hour of Day:</label>
+          <input type="text" id="hour_of_day" name="hour_of_day" />
+
+          <label for="category">Category:</label>
+          <input type="text" id="category" name="category" />
+
+          <label for="amount">Amount (USD):</label>
+          <input type="text" id="amount" name="amount(usd)" />
+
+          <label for="merchant">Merchant:</label>
+          <input type="text" id="merchant" name="merchant" />
+
+          <label for="job">Job:</label>
+          <input type="text" id="job" name="job" />
+
+          <label for="zip">Zip:</label>
+          <input type="text" id="zip" name="zip" />
+
+          <label for="lat">Latitude:</label>
+          <input type="text" id="lat" name="lat" />
+
+          <label for="long">Longitude:</label>
+          <input type="text" id="long" name="long" />
+
+          <label for="url">URL:</label>
+          <input type="text" id="url" name="url" />
+        </div>
+        <button type="submit">Predict</button>
+      </form>
+    </div>
+
+    <script>
+      document.getElementById("prediction-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        // Collect the form data
+        const formData = new FormData(this);
+
+        // Convert the form data to JSON
+        const jsonData = {};
+        for (const [key, value] of formData.entries()) {
+          jsonData[key] = value;
+        }
+
+        // Make the POST request to the predict endpoint
+        fetch("/predict", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer YOUR_TOKEN_HERE` // Replace with your token
+          },
+          body: JSON.stringify(jsonData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Handle the response data
+            const safebrowsingResult = data.in_safebrowsing;
+            const predictionResult = data.prediction;
+            alert(`Safebrowsing: ${safebrowsingResult}\nPrediction: ${predictionResult}`);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      });
+    </script>
+  </body>
+</html>
