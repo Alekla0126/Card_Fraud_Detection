@@ -1,21 +1,16 @@
+from .extensions import db
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 
-# Create the extension instances
-db = SQLAlchemy()
-migrate = Migrate()
-
-def create_app():
-    app = Flask(__name__)
-
-    # Load configurations
-    app.config.from_object('config.ConfigClass')
-
-    # Initialize extensions with app
-    db.init_app(app)
-    migrate.init_app(app, db)
-
-    # other setup like registering blueprints etc.
+def create_app(config_class):
+    app = Flask(__name__, template_folder='templates')
+    app.config.from_object(config_class)
     
+    db.init_app(app)  # Tie the db instance to the app
+
+    from app.routes.main import main
+    from .routes.auth import auth
+    # Register the blueprints
+    app.register_blueprint(auth)
+    app.register_blueprint(main)
+
     return app

@@ -5,8 +5,10 @@ from nltk.stem.snowball import SnowballStemmer
 from nltk.tokenize import RegexpTokenizer
 from keras.optimizers import Adagrad
 from keras.models import load_model
+from flask import request, jsonify
 # from config import API_KEY
 from flask import Blueprint
+from functools import wraps
 import tensorflow as tf
 import pandas as pd
 import numpy as np
@@ -47,14 +49,31 @@ def prepare_data(X):
     # Return the features and the target.
     return X, features
 
-app = Flask(__name__)
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 401
+
+        # Here you should validate the token, e.g., check if it's valid, expired, etc.
+        # If invalid:
+        # return jsonify({'message': 'Token is invalid!'}), 401
+
+        return f(*args, **kwargs)
+
+    return decorated
 
 # Define the home page route.
-@app.route('/')
+@main.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/predict', methods=['POST'])
+@main.route('/predict', methods=['POST'])
 @token_required
 def predict():
     try:

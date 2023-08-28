@@ -4,7 +4,8 @@ from wtforms.validators import DataRequired, Length
 from app.models.user import User
 from flask_wtf import FlaskForm
 from functools import wraps
-from app import db, app  # Assuming `app` is created in your main module
+from flask import current_app
+from app import db
 import jwt  # Ensure you've installed jwt
 
 # Form definition
@@ -18,9 +19,9 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
-bp = Blueprint('auth', __name__, url_prefix='/auth')
+auth = Blueprint('auth', __name__, url_prefix='/auth')
 
-@bp.route('/register', methods=['GET', 'POST'])
+@auth.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -32,16 +33,16 @@ def register():
             return redirect(url_for('auth.register'))
 
         new_user = User(username=username)
-        new_user.set_password(password)
+        new_user.set_password(password)  # Call the set_password method
         db.session.add(new_user)
         db.session.commit()
 
         flash('Successfully registered!', 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('main.home'))  # Redirect to the home page
 
     return render_template('register.html', form=form)
 
-@bp.route('/login', methods=['GET', 'POST'])
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -61,7 +62,7 @@ def login():
 
     return render_template('login.html', form=form)
 
-@bp.route('/logout')
+@auth.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('home'))
@@ -73,13 +74,13 @@ def token_required(f):
         if not token:
             return jsonify({'status': 'error', 'message': 'Token is missing!'}), 401
         try:
-            data = jwt.decode(token, app.config['SECRET_KEY'])
+            data = jwt.decode(token, current_app.config['SECRET_KEY'])
             current_user = User.query.filter_by(id=data['user_id']).first()
         except:
             return jsonify({'status': 'error', 'message': 'Token is invalid!'}), 401
         return f(current_user, *args, **kwargs)
     return decorated
 
-@app.route('/')
+@auth.route('/')
 def home():
     return render_template('index.html')
