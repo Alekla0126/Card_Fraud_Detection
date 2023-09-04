@@ -49,34 +49,79 @@ def prepare_data(X):
     # Return the features and the target.
     return X, features
 
+# Modify the token_required decorator
 def token_required(f):
     @wraps(f)
-    def decorated(*args, **kwargs):
-        token = None
-
-        if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
-
+    def decorated_function(*args, **kwargs):
+        token = request.headers.get('x-access-token')
         if not token:
-            return jsonify({'message': 'Token is missing!'}), 401
+            return jsonify({'status': 'error', 'message': 'Token is missing!'}), 401
+        try:
+            data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+            current_user = User.query.filter_by(id=data['user_id']).first()
+        except jwt.ExpiredSignatureError:
+            return jsonify({'status': 'error', 'message': 'Token has expired!'}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({'status': 'error', 'message': 'Invalid token!'}), 401
+        
+        # Check user's tier and enforce limitations
+        if current_user.tier == 'free' and limitation_exceeded(current_user, 10):
+            return jsonify({'status': 'error', 'message': 'Free tier limitation exceeded!'}), 403
+        elif current_user.tier == 'professional' and limitation_exceeded(current_user, 500):
+            return jsonify({'status': 'error', 'message': 'Professional tier limitation exceeded!'}), 403
+        elif current_user.tier == 'business' and limitation_exceeded(current_user, 1000):
+            return jsonify({'status': 'error', 'message': 'Business tier limitation exceeded!'}), 403
+        
+        return f(current_user, *args, **kwargs)
+    return decorated_function
 
-        # Here you should validate the token, e.g., check if it's valid, expired, etc.
-        # If invalid:
-        # return jsonify({'message': 'Token is invalid!'}), 401
+# Hypothetical function to check if user's prediction limit has been exceeded
+def limitation_exceeded(user, limit):
+    today = datetime.date.today()
+    remaining_predictions = limit - user.scans.filter_by(date=today).count()
+    return remaining_predictions <= 0
 
-        return f(*args, **kwargs)
-
-    return decorated
+# Decode the token to access according to the tier.
+def decode_token(token):
+    try:
+        decoded_token = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+        return decoded_token
+    except jwt.ExpiredSignatureError:
+        raise Exception('Token has expired')
+    except jwt.InvalidTokenError:
+        raise Exception('Invalid token')
 
 # Define the home page route.
 @main.route('/')
 def home():
     return render_template('index.html')
 
+@main.route('/predict', methods=['GET'])
+@token_required
+def predict_get():
+    if request.method == 'GET':
+        return render_template('predict.html')
+
 @main.route('/predict', methods=['POST'])
 @token_required
-def predict():
+def predict_post():
+    
     try:
+        
+        user = User.query.filter_by(id=current_user.id).first()
+        if not user:
+            return jsonify({'status': 'error', 'message': 'User not found'})
+
+        # Check the remaining scans for the user
+        remaining = user.remaining_scans()
+        if remaining <= 0:
+            return jsonify({'status': 'error', 'message': f'You have exceeded your daily scan limit for {user.tier} tier'})
+
+        # If the user has scans remaining, log the scan in the database
+        scan = Scan(user_id=user.id)
+        db.session.add(scan)
+        db.session.commit()
+        
         # Get the input data.
         input_data = request.get_json()
 
@@ -182,7 +227,3 @@ def predict():
         error_message = f"An error occurred: {str(e)}"
         print(traceback.format_exc())  # Print the error traceback to the console
         return jsonify({'status': 'error', 'message': error_message})
-
-if __name__ == '__main__':
-    # Remove the debug=True parameter for production.
-    app.run()

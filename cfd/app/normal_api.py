@@ -79,8 +79,7 @@ def predict():
         
         # Stemmed text, tokenize and vectorize.
         input_df, features = prepare_data(input_df)
-
-        
+ 
         # Checking the format.
         input_df['hour_of_day'] = input_df['hour_of_day'].astype('string') 
         input_df['category'] = input_df['category'].astype('string')
@@ -99,7 +98,6 @@ def predict():
         print("After text processing: ")
         print(input_df)
         
-        
         # Instantiate the encoder with the loaded categories
         enc = OrdinalEncoder(categories=encoded_categories, dtype=np.int64) 
         # Encode the categorical features.
@@ -111,7 +109,6 @@ def predict():
         print("After encoding: ")
         print(input_df)
 
-        
         # Scale the features.
         cols = input_df.columns
         input_df = scaler.transform(input_df)

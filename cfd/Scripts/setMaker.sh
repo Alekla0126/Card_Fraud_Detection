@@ -18,11 +18,16 @@ fi
 # Extract the contents of the tar.gz file
 tar -xzf "$TEMP_DIR/phishing-links.tar.gz" -C "$TEMP_DIR"
 
+# Decompress the extracted files
+find "$TEMP_DIR" -type f -name '*.gz' -exec gunzip {} \;
+
 # Create a CSV file and add header
 echo "URL" > dataset.csv
 
-# Find URLs in extracted files and add to the CSV
-find "$TEMP_DIR" -type f -exec cat {} \; >> dataset.csv
+# Process each file and clean URLs
+find "$TEMP_DIR" -type f | while read -r file; do
+    cat "$file" | python3 clean_urls.py >> ../dataset.csv
+done
 
 # Clean up - remove the temporary directory
 rm -rf "$TEMP_DIR"

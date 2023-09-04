@@ -2,13 +2,55 @@
 <html>
 <head>
     <title>Register</title>
+    <script>
+        function submitForm(event) {
+            event.preventDefault();  // Prevent the default form submission
+            
+            const formData = {
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value,
+                tier: document.getElementById("tier").value,
+            };
+
+            fetch('/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // Handle the response here, e.g., show a message or redirect
+                if (data.status === 'success') {
+                    alert('Successfully registered!');
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
 </head>
 <body>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        {{ form.username.label }} {{ form.username() }}<br>
-        {{ form.password.label }} {{ form.password() }}<br>
-        {{ form.submit() }}
+    <form onsubmit="submitForm(event)">
+        <label>Username:</label>
+        <input type="text" id="username" name="username"><br>
+        
+        <label>Password:</label>
+        <input type="password" id="password" name="password"><br>
+        
+        <label>Tier:</label>
+        <select id="tier" name="tier">
+            <option value="free">Free</option>
+            <option value="professional">Professional</option>
+            <option value="enterprise">Enterprise</option>
+        </select><br>
+        
+        <input type="submit" value="Register">
     </form>
 </body>
 </html>

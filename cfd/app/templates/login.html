@@ -2,13 +2,43 @@
 <html>
 <head>
     <title>Login</title>
+    <script>
+        function login(event) {
+            event.preventDefault();
+
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
+
+            fetch('/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username: username, password: password})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Logged in successfully.');
+                    location.href = '/predict';  // Redirect to the prediction page
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
 </head>
 <body>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        {{ form.username.label }} {{ form.username() }}<br>
-        {{ form.password.label }} {{ form.password() }}<br>
-        {{ form.submit() }}
+    <h2>Login</h2>
+    <form onsubmit="login(event)">
+        <label>Username:</label>
+        <input type="text" id="username"><br>
+        <label>Password:</label>
+        <input type="password" id="password"><br>
+        <input type="submit" value="Login">
     </form>
 </body>
 </html>
