@@ -3,18 +3,21 @@ from sklearn.feature_extraction.text import CountVectorizer
 from flask import Flask, jsonify, request, render_template
 from nltk.stem.snowball import SnowballStemmer
 from nltk.tokenize import RegexpTokenizer
+from flask import Blueprint, current_app
 from keras.optimizers import Adagrad
 from keras.models import load_model
 from flask import request, jsonify
+from app.models.user import User
 # from config import API_KEY
-from flask import Blueprint
 from functools import wraps
 import tensorflow as tf
 import pandas as pd
 import numpy as np
 import traceback
+import datetime
 import requests
 import pickle
+import jwt
 import os
 
 # Load categories.
@@ -53,9 +56,9 @@ def prepare_data(X):
 def token_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        token = request.headers.get('x-access-token')
+        token = request.cookies.get('token')
         if not token:
-            return jsonify({'status': 'error', 'message': 'Token is missing!'}), 401
+            return jsonify({'status': 'error', 'message': 'Token is missing!'}), 401 
         try:
             data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
             current_user = User.query.filter_by(id=data['user_id']).first()
@@ -78,8 +81,8 @@ def token_required(f):
 # Hypothetical function to check if user's prediction limit has been exceeded
 def limitation_exceeded(user, limit):
     today = datetime.date.today()
-    remaining_predictions = limit - user.scans.filter_by(date=today).count()
-    return remaining_predictions <= 0
+    remaining_predictions = user.remaining_scans
+    return remaining_predictions
 
 # Decode the token to access according to the tier.
 def decode_token(token):
@@ -96,12 +99,14 @@ def decode_token(token):
 def home():
     return render_template('index.html')
 
+# UI of the prediction.
 @main.route('/predict', methods=['GET'])
 @token_required
 def predict_get():
     if request.method == 'GET':
         return render_template('predict.html')
 
+# Logic of the API to predict.
 @main.route('/predict', methods=['POST'])
 @token_required
 def predict_post():
@@ -227,3 +232,5 @@ def predict_post():
         error_message = f"An error occurred: {str(e)}"
         print(traceback.format_exc())  # Print the error traceback to the console
         return jsonify({'status': 'error', 'message': error_message})
+    
+    return jsonify({'prediction': prediction})

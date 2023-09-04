@@ -7,31 +7,26 @@
     <script>
         async function sendData(event) {
             event.preventDefault();
-
             // Grab all the form data
             const formData = new FormData(event.target);
             const data = {};
             formData.forEach((value, key) => data[key] = value);
-
             try {
                 const response = await fetch('/predict', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'x-access-token': 'YOUR_TOKEN'  // Uncomment this if you need to send the token
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(data)
-                });
-                
+                    body: JSON.stringify(data),
+                    credentials: 'include'
+                }); 
                 const result = await response.json();
-
                 // Display result (update this as per your requirements)
                 alert(JSON.stringify(result));
-
             } catch (error) {
                 console.error('Error:', error);
             }
-        }
+        }        
     </script>
 </head>
 <body>

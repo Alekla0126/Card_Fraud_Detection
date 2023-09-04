@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, redirect, url_for, flash, render_template
+from flask import Blueprint, request, jsonify, redirect, url_for, flash, render_template, make_response
 from flask_login import current_user, login_user, logout_user, login_required
 from wtforms import StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length
@@ -8,7 +8,8 @@ from app import login_manager
 from flask import current_app
 from functools import wraps
 from app import db
-import jwt 
+from datetime import datetime, timedelta
+import jwt
 
 # Form definitions
 class RegistrationForm(FlaskForm):
@@ -22,6 +23,8 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
+SECRET_KEY = 'your_secret_key'
+
 # Registration of the route.
 auth = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -29,27 +32,27 @@ auth = Blueprint('auth', __name__, url_prefix='/auth')
 def display_register_form():
     return render_template('register.html')
 
+from datetime import datetime
+
 @auth.route('/register', methods=['POST'])
 def register():
     data = request.json
     username = data.get('username')
     password = data.get('password')
     tier = data.get('tier')
-
     # Ensure required fields are provided
     if not username or not password or not tier:
         return jsonify({'status': 'error', 'message': 'Missing required fields'}), 400
-
     # Check if the user already exists
     if User.query.filter_by(username=username).first():
         return jsonify({'status': 'error', 'message': 'Username already exists'}), 409
-
     # Create the new user
     new_user = User(username=username, tier=tier)
     new_user.set_password(password)
+    # Set the last_reset attribute.
+    new_user.last_reset = datetime.utcnow()
     db.session.add(new_user)
     db.session.commit()
-
     # Generate an access token for the registered user
     token = jwt.encode({'user_id': new_user.id, 'tier': new_user.tier}, current_app.config['SECRET_KEY'], algorithm='HS256') 
     print(token)
@@ -66,56 +69,52 @@ def display_login_form():
 @auth.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-
     if not data:
         return jsonify({'status': 'error', 'message': 'Invalid request'}), 400
-
     username = data.get('username')
     password = data.get('password')
-
     if not username or not password:
         return jsonify({'status': 'error', 'message': 'Username and password are required'}), 400
-
     user = User.query.filter_by(username=username).first()
-
     if user and user.check_password(password):
         # If you're using Flask-Login, this will establish a user session
         login_user(user)
-
-        # Generate an access token for the logged-in user
-        token = jwt.encode({'user_id': user.id, 'tier': user.tier}, current_app.config['SECRET_KEY'], algorithm='HS256')
-
-        return jsonify({'status': 'success', 'message': 'Logged in successfully.', 'token': token}), 200
+        
+        # Generate an access token for the logged-in user using the `generate_token` function
+        token = generate_token(user.id, user.tier)
+        response = make_response(jsonify({'status': 'success', 'message': 'Logged in successfully.'}), 200)
+        response.set_cookie('token', token, httponly=True, samesite=None, secure=False)
+        return response
 
     return jsonify({'status': 'error', 'message': 'Invalid username or password.'}), 401
+
+def generate_token(user_id, tier, expiration_hours=1):
+    payload = {
+        'user_id': user_id,
+        'tier': tier,
+        'exp': datetime.utcnow() + timedelta(hours=expiration_hours)
+    }
+    secret_key = current_app.config['SECRET_KEY']
+    return jwt.encode(payload, secret_key, algorithm='HS256')
+
+def decode_token(token):
+    try:
+        return jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+    except jwt.ExpiredSignatureError:
+        raise ValueError("Token has expired")
+    except jwt.InvalidTokenError:
+        raise ValueError("Invalid token")
+
+def generate_api_token(user_id, tier):
+    return generate_token(user_id, tier, expiration_hours=720)
 
 @auth.route('/logout', methods=['POST'])
 @login_required
 def logout():
+    response = make_response(jsonify({'status': 'success', 'message': 'Logged out successfully.'}), 200)
+    response.delete_cookie('token')
     logout_user()
-    return jsonify({'status': 'success', 'message': 'Logged out successfully.'}), 200
-
-# Modify the token_required decorator
-def token_required(required_tier):
-    def decorator(f):
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
-            token = request.headers.get('x-access-token')
-            if not token:
-                return jsonify({'status': 'error', 'message': 'Token is missing!'}), 401
-            try:
-                data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
-                current_user = User.query.filter_by(id=data['user_id']).first()
-                # Check if the user's tier matches the required tier
-                if current_user.tier != required_tier:
-                    return jsonify({'status': 'error', 'message': 'Insufficient permissions!'}), 403
-            except jwt.ExpiredSignatureError:
-                return jsonify({'status': 'error', 'message': 'Token has expired!'}), 401
-            except jwt.InvalidTokenError:
-                return jsonify({'status': 'error', 'message': 'Invalid token!'}), 401
-            return f(current_user, *args, **kwargs)
-        return decorated_function
-    return decorator
+    return response
 
 @auth.route('/')
 def home():

@@ -5,22 +5,26 @@
     <script>
         function login(event) {
             event.preventDefault();
-
+        
             let username = document.getElementById('username').value;
             let password = document.getElementById('password').value;
-
+        
             fetch('/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({username: username, password: password})
-            })
+                body: JSON.stringify({username: username, password: password}),
+                credentials: 'include'
+            }) 
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    alert('Logged in successfully.');
-                    location.href = '/predict';  // Redirect to the prediction page
+                    // Save the token to localStorage
+                    localStorage.setItem('token', data.token);
+                    
+                    alert('Logged in successfully.'); 
+                    location.href = '/predict'; 
                 } else {
                     alert(data.message);
                 }
@@ -28,7 +32,7 @@
             .catch(error => {
                 console.error('Error:', error);
             });
-        }
+        }        
     </script>
 </head>
 <body>
