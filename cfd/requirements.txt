@@ -17,3 +17,4 @@ Werkzeug
 python-jose
 cryptography
 flask-cors
+psycopg2-binary
