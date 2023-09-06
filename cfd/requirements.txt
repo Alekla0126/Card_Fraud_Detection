@@ -1,6 +1,11 @@
 Flask
+Flask-Login
+Flask-WRF
+gunicorn
+nltk
 numpy
 pandas
+requests
 scikit-learn
 nltk
 Keras
@@ -8,3 +13,7 @@ tensorflow
 requests
 protobuf
 gunicorn
+Werkzeug
+python-jose
+cryptography
+flask-cors
