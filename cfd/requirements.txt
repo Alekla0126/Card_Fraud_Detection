@@ -1,6 +1,6 @@
 Flask
 Flask-Login
-Flask-WRF
+Flask-WTF
 gunicorn
 nltk
 numpy
