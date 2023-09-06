@@ -19,3 +19,4 @@ cryptography
 flask-cors
 psycopg2-binary
 flask_sqlalchemy
+PyJWT
