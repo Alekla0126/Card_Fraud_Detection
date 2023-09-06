@@ -68,21 +68,20 @@ def token_required(f):
             return jsonify({'status': 'error', 'message': 'Invalid token!'}), 401
         
         # Check user's tier and enforce limitations
-        if current_user.tier == 'free' and limitation_exceeded(current_user, 10):
+        if current_user.tier == 'free' and limitation_exceeded(current_user):
             return jsonify({'status': 'error', 'message': 'Free tier limitation exceeded!'}), 403
-        elif current_user.tier == 'professional' and limitation_exceeded(current_user, 500):
+        elif current_user.tier == 'professional' and limitation_exceeded(current_user):
             return jsonify({'status': 'error', 'message': 'Professional tier limitation exceeded!'}), 403
-        elif current_user.tier == 'business' and limitation_exceeded(current_user, 1000):
+        elif current_user.tier == 'business' and limitation_exceeded(current_user):
             return jsonify({'status': 'error', 'message': 'Business tier limitation exceeded!'}), 403
-        
         return f(current_user, *args, **kwargs)
     return decorated_function
-
-# Hypothetical function to check if user's prediction limit has been exceeded
-def limitation_exceeded(user, limit):
+    
+# Function to check if user's prediction limit has been exceeded.
+def limitation_exceeded(user):
     today = datetime.date.today()
-    remaining_predictions = user.remaining_scans
-    return remaining_predictions
+    remaining_predictions = user.remaining_scans()
+    return remaining_predictions <= 0
 
 # Decode the token to access according to the tier.
 def decode_token(token):
@@ -99,12 +98,11 @@ def decode_token(token):
 def home():
     return render_template('index.html')
 
-# UI of the prediction.
 @main.route('/predict', methods=['GET'])
 @token_required
-def predict_get():
-    if request.method == 'GET':
-        return render_template('predict.html')
+def predict_screen(current_user):
+    # You can now use current_user inside this function if needed
+    return render_template('predict.html')
 
 # Logic of the API to predict.
 @main.route('/predict', methods=['POST'])

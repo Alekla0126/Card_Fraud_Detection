@@ -2,13 +2,14 @@ from flask import Blueprint, request, jsonify, redirect, url_for, flash, render_
 from flask_login import current_user, login_user, logout_user, login_required
 from wtforms import StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length
+from datetime import datetime, timedelta
 from app.models.user import User
 from flask_wtf import FlaskForm
-from app import login_manager
 from flask import current_app
+from datetime import datetime
+from app import login_manager
 from functools import wraps
 from app import db
-from datetime import datetime, timedelta
 import jwt
 
 # Form definitions
@@ -23,8 +24,6 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
-SECRET_KEY = 'your_secret_key'
-
 # Registration of the route.
 auth = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -32,7 +31,6 @@ auth = Blueprint('auth', __name__, url_prefix='/auth')
 def display_register_form():
     return render_template('register.html')
 
-from datetime import datetime
 
 @auth.route('/register', methods=['POST'])
 def register():
@@ -63,7 +61,7 @@ from flask import jsonify, request
 @auth.route('/login', methods=['GET'])
 def display_login_form():
     if current_user.is_authenticated:
-        return redirect(url_for('main.predict_get'))
+        return redirect(url_for('main.predict_screen'))
     return render_template('login.html')
 
 @auth.route('/login', methods=['POST'])

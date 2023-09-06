@@ -1,5 +1,5 @@
 from flask_login import LoginManager
-from .extensions import db
+from app.extensions import db
 from flask import Flask
 
 login_manager = LoginManager()
@@ -25,7 +25,3 @@ def create_app(config_class):
         return User.query.get(int(user_id))
 
     return app
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))

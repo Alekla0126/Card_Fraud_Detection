@@ -49,18 +49,16 @@ class User(db.Model, UserMixin):
             db.session.commit()
             return SCAN_LIMITS.get(self.tier, 0)
         else:
-            # Calculate remaining scans for today
+            # Calculate remaining scans for today.
             today = datetime.date.today()
             scans_done_today = self.scans.filter_by(date=today).count()
             remaining = SCAN_LIMITS.get(self.tier, 0) - scans_done_today
-            
             # Ensure the remaining value does not drop below zero
             return max(0, remaining) 
     
 class Scan(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    date = db.Column(db.Date, default=datetime.date.today)
-    
+    date = db.Column(db.Date, default=datetime.date.today) 
     def __repr__(self):
         return f"<Scan(user_id={self.user_id}, date={self.date})>"
