@@ -22,7 +22,7 @@ stemmer = SnowballStemmer('english')
 cv = CountVectorizer()
 
 # Load your model with the custom optimizer.
-model = load_model('LSTM.h5', custom_objects={'Adagrad': Adagrad})
+# model = load_model('LSTM.h5', custom_objects={'Adagrad': Adagrad})
 
 # Adding the blueprint.
 main = Blueprint('main', __name__)
