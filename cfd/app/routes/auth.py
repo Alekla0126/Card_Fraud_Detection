@@ -3,6 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from wtforms import StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length
 from datetime import datetime, timedelta
+from flask import jsonify, request
 from app.models.user import User
 from flask_wtf import FlaskForm
 from flask import current_app
@@ -31,7 +32,6 @@ auth = Blueprint('auth', __name__, url_prefix='/auth')
 def display_register_form():
     return render_template('register.html')
 
-
 @auth.route('/register', methods=['POST'])
 def register():
     data = request.json
@@ -42,7 +42,8 @@ def register():
     if not username or not password or not tier:
         return jsonify({'status': 'error', 'message': 'Missing required fields'}), 400
     # Check if the user already exists
-    if User.query.filter_by(username=username).first():
+    existing_user = User.query.filter_by(username=username).first()
+    if existing_user:
         return jsonify({'status': 'error', 'message': 'Username already exists'}), 409
     # Create the new user
     new_user = User(username=username, tier=tier)
@@ -53,10 +54,7 @@ def register():
     db.session.commit()
     # Generate an access token for the registered user
     token = jwt.encode({'user_id': new_user.id, 'tier': new_user.tier}, current_app.config['SECRET_KEY'], algorithm='HS256') 
-    print(token)
     return jsonify({'status': 'success', 'message': 'Successfully registered!', 'token': token}), 201
-
-from flask import jsonify, request
 
 @auth.route('/login', methods=['GET'])
 def display_login_form():
@@ -77,13 +75,11 @@ def login():
     if user and user.check_password(password):
         # If you're using Flask-Login, this will establish a user session
         login_user(user)
-        
         # Generate an access token for the logged-in user using the `generate_token` function
         token = generate_token(user.id, user.tier)
         response = make_response(jsonify({'status': 'success', 'message': 'Logged in successfully.'}), 200)
-        response.set_cookie('token', token, httponly=True, samesite=None, secure=False)
+        response.set_cookie('token', token)
         return response
-
     return jsonify({'status': 'error', 'message': 'Invalid username or password.'}), 401
 
 def generate_token(user_id, tier, expiration_hours=1):
@@ -113,6 +109,15 @@ def logout():
     response.delete_cookie('token')
     logout_user()
     return response
+
+@auth.route('/authenticated', methods=['GET'])
+def check_auth():
+    if current_user.is_authenticated:
+        # User is authenticated
+        return jsonify({'authenticated': True}), 200
+    else:
+        # User is not authenticated
+        return jsonify({'authenticated': False}), 401
 
 @auth.route('/')
 def home():

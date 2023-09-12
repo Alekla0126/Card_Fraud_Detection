@@ -160,7 +160,3 @@ def predict():
         error_message = f"An error occurred: {str(e)}"
         print(traceback.format_exc())  # Print the error traceback to the console
         return jsonify({'status': 'error', 'message': error_message})
-
-if __name__ == '__main__':
-    # Remove the debug=True parameter for production.
-    app.run()

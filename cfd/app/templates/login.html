@@ -21,8 +21,7 @@
             .then(data => {
                 if (data.status === 'success') {
                     // Save the token to localStorage
-                    localStorage.setItem('token', data.token);
-                    
+                    localStorage.setItem('token', data.token); 
                     alert('Logged in successfully.'); 
                     location.href = '/predict'; 
                 } else {

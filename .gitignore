@@ -135,6 +135,6 @@ dmypy.json
 .pyre/
 
 # API keys
-/cfd/config.py
+# /cfd/config.py
 # Enviroment
 /cfd/.env
