@@ -1,32 +1,20 @@
-from sklearn.preprocessing import OrdinalEncoder, StandardScaler
 from sklearn.feature_extraction.text import CountVectorizer
 from flask import Flask, jsonify, request, render_template
 from nltk.stem.snowball import SnowballStemmer
 from nltk.tokenize import RegexpTokenizer
 from flask import Blueprint, current_app
-from keras.optimizers import Adagrad
 from keras.models import load_model
 from flask import request, jsonify
 from app.models.user import User
 # from config import API_KEY
 from functools import wraps
-import tensorflow as tf
 import pandas as pd
-import numpy as np
 import traceback
 import datetime
 import requests
 import pickle
 import jwt
 import os
-
-# Load categories.
-with open('encoded_categories.pkl', 'rb') as f:
-    encoded_categories = pickle.load(f)
-    
-# Load the saved scaler object
-with open('scaler.pkl', 'rb') as f:
-    scaler = pickle.load(f)
     
 # Initialize the tokenizer, stemmer, and vectorizer.
 tokenizer = RegexpTokenizer(r'[A-Za-z]+')
@@ -38,19 +26,6 @@ model = load_model('LSTM.h5', custom_objects={'Adagrad': Adagrad})
 
 # Adding the blueprint.
 main = Blueprint('main', __name__)
-
-#  Prepare the data for the model.
-def prepare_data(X):
-    # Tokenize the text.
-    X['text_tokenized'] = X.url.map(lambda t: tokenizer.tokenize(t))
-    # Stem the text.
-    X['text_stemmed'] = X.text_tokenized.map(lambda t: [stemmer.stem(word) for word in t])
-    # Join the text.
-    X['text_sent'] = X.text_stemmed.map(lambda t: ' '.join(t))
-    # Vectorize the text.
-    features = cv.fit_transform(X.text_sent)
-    # Return the features and the target.
-    return X, features
 
 # Modify the token_required decorator
 def token_required(f):
@@ -103,11 +78,6 @@ def home():
 def predict_screen(current_user):
     # You can now use current_user inside this function if needed
     return render_template('predict.html')
-
-# Logic of the API to predict.
-@main.route('/predict', methods=['POST'])
-@token_required
-def predict_post():
     
     try:
         
