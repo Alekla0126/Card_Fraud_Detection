@@ -1,7 +1,7 @@
 # Ignore the Dataset
 *.csv
 # Ignore the directory with the datasets
-/Datasets
+/cfd/datasets.csv
 /cfd/api.py
 
 # Byte-compiled / optimized / DLL files
