@@ -16,7 +16,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   List<String> tiers = ['free', 'professional', 'enterprise']; // List of tiers available
 
   Future<void> registerUser(String username, String password, String tier) async {
-    final Uri uri = Uri.parse('http://127.0.0.1:5000/auth/register');
+    final Uri uri = Uri.parse('https://bancolombias-url-fraud-detection.onrender.com/auth/register');
 
     final response = await http.post(
       uri,
@@ -119,7 +119,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 value: _selectedTier,
                 onChanged: (value) {
                   setState(() {
-                    _selectedTier = value as String?;
+                    _selectedTier = value;
                   });
                 },
                 validator: (value) {
@@ -136,6 +136,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 }).toList(),
                 decoration: const InputDecoration(labelText: 'Select Tier'),
               ),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
