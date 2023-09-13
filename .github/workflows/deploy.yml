@@ -14,7 +14,7 @@ jobs:
       - uses: subosito/flutter-action@v2
       - name: Build Flutter Web
         working-directory: cfd_flutter
-        run: flutter build web --release --web-renderer html --base-href /cfd_bancolombia/
+        run: flutter build web --release --web-renderer html --base-href /cfd_flutter/
       - name: Configure git user
         working-directory: cfd_flutter
         run: |
