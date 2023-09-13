@@ -1,7 +1,7 @@
-import 'package:cfd/registration_page.dart';
+import 'package:cfd_flutter/registration_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:cfd/login_page.dart';
+import 'package:cfd_flutter/login_page.dart';
 import 'home_page.dart';
 
 void main() async {

@@ -290,13 +290,13 @@
       "languageVersion": "2.19"
     },
     {
-      "name": "cfd",
+      "name": "cfd_flutter",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2023-09-13T11:42:47.062235Z",
+  "generated": "2023-09-13T11:44:24.784269Z",
   "generator": "pub",
   "generatorVersion": "3.1.0"
 }
