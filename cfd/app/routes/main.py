@@ -1,81 +1,81 @@
-from sklearn.feature_extraction.text import CountVectorizer
-from flask import Flask, jsonify, request, render_template
-from nltk.stem.snowball import SnowballStemmer
-from nltk.tokenize import RegexpTokenizer
-from flask import Blueprint, current_app
-from keras.models import load_model
-from flask import request, jsonify
-from app.models.user import User
-# from config import API_KEY
-from functools import wraps
-import pandas as pd
-import traceback
-import datetime
-import requests
-import pickle
-import jwt
-import os
+# from sklearn.feature_extraction.text import CountVectorizer
+# from flask import Flask, jsonify, request, render_template
+# from nltk.stem.snowball import SnowballStemmer
+# from nltk.tokenize import RegexpTokenizer
+# from flask import Blueprint, current_app
+# from keras.models import load_model
+# from flask import request, jsonify
+# from app.models.user import User
+# # from config import API_KEY
+# from functools import wraps
+# import pandas as pd
+# import traceback
+# import datetime
+# import requests
+# import pickle
+# import jwt
+# import os
     
-# Initialize the tokenizer, stemmer, and vectorizer.
-tokenizer = RegexpTokenizer(r'[A-Za-z]+')
-stemmer = SnowballStemmer('english')
-cv = CountVectorizer()
+# # Initialize the tokenizer, stemmer, and vectorizer.
+# tokenizer = RegexpTokenizer(r'[A-Za-z]+')
+# stemmer = SnowballStemmer('english')
+# cv = CountVectorizer()
 
-# Load your model with the custom optimizer.
-# model = load_model('LSTM.h5', custom_objects={'Adagrad': Adagrad})
+# # Load your model with the custom optimizer.
+# # model = load_model('LSTM.h5', custom_objects={'Adagrad': Adagrad})
 
-# Adding the blueprint.
-main = Blueprint('main', __name__)
+# # Adding the blueprint.
+# main = Blueprint('main', __name__)
 
-# Modify the token_required decorator
-def token_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        token = request.cookies.get('token')
-        if not token:
-            return jsonify({'status': 'error', 'message': 'Token is missing!'}), 401 
-        try:
-            data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
-            current_user = User.query.filter_by(id=data['user_id']).first()
-        except jwt.ExpiredSignatureError:
-            return jsonify({'status': 'error', 'message': 'Token has expired!'}), 401
-        except jwt.InvalidTokenError:
-            return jsonify({'status': 'error', 'message': 'Invalid token!'}), 401
+# # Modify the token_required decorator
+# def token_required(f):
+#     @wraps(f)
+#     def decorated_function(*args, **kwargs):
+#         token = request.cookies.get('token')
+#         if not token:
+#             return jsonify({'status': 'error', 'message': 'Token is missing!'}), 401 
+#         try:
+#             data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+#             current_user = User.query.filter_by(id=data['user_id']).first()
+#         except jwt.ExpiredSignatureError:
+#             return jsonify({'status': 'error', 'message': 'Token has expired!'}), 401
+#         except jwt.InvalidTokenError:
+#             return jsonify({'status': 'error', 'message': 'Invalid token!'}), 401
         
-        # Check user's tier and enforce limitations
-        if current_user.tier == 'free' and limitation_exceeded(current_user):
-            return jsonify({'status': 'error', 'message': 'Free tier limitation exceeded!'}), 403
-        elif current_user.tier == 'professional' and limitation_exceeded(current_user):
-            return jsonify({'status': 'error', 'message': 'Professional tier limitation exceeded!'}), 403
-        elif current_user.tier == 'business' and limitation_exceeded(current_user):
-            return jsonify({'status': 'error', 'message': 'Business tier limitation exceeded!'}), 403
-        return f(current_user, *args, **kwargs)
-    return decorated_function
+#         # Check user's tier and enforce limitations
+#         if current_user.tier == 'free' and limitation_exceeded(current_user):
+#             return jsonify({'status': 'error', 'message': 'Free tier limitation exceeded!'}), 403
+#         elif current_user.tier == 'professional' and limitation_exceeded(current_user):
+#             return jsonify({'status': 'error', 'message': 'Professional tier limitation exceeded!'}), 403
+#         elif current_user.tier == 'business' and limitation_exceeded(current_user):
+#             return jsonify({'status': 'error', 'message': 'Business tier limitation exceeded!'}), 403
+#         return f(current_user, *args, **kwargs)
+#     return decorated_function
     
-# Function to check if user's prediction limit has been exceeded.
-def limitation_exceeded(user):
-    today = datetime.date.today()
-    remaining_predictions = user.remaining_scans()
-    return remaining_predictions <= 0
+# # Function to check if user's prediction limit has been exceeded.
+# def limitation_exceeded(user):
+#     today = datetime.date.today()
+#     remaining_predictions = user.remaining_scans()
+#     return remaining_predictions <= 0
 
-# Decode the token to access according to the tier.
-def decode_token(token):
-    try:
-        decoded_token = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
-        return decoded_token
-    except jwt.ExpiredSignatureError:
-        raise Exception('Token has expired')
-    except jwt.InvalidTokenError:
-        raise Exception('Invalid token')
+# # Decode the token to access according to the tier.
+# def decode_token(token):
+#     try:
+#         decoded_token = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+#         return decoded_token
+#     except jwt.ExpiredSignatureError:
+#         raise Exception('Token has expired')
+#     except jwt.InvalidTokenError:
+#         raise Exception('Invalid token')
 
-# Define the home page route.
-@main.route('/')
-def home():
-    return render_template('index.html')
+# # Define the home page route.
+# @main.route('/')
+# def home():
+#     return render_template('index.html')
 
-@main.route('/predict', methods=['GET'])
-@token_required
-def predict_screen(current_user):
+# @main.route('/predict', methods=['GET'])
+# @token_required
+# def predict_screen(current_user):
     # You can now use current_user inside this function if needed
     return render_template('predict.html')
     
