@@ -11,11 +11,11 @@ def create_app(config_class):
     db.init_app(app)  # Tie the db instance to the app
     login_manager.init_app(app)  # Initialize Flask-Login
 
-    from app.routes.main import main
+    from app.routes.predict import predict
     from app.routes.auth import auth
     # Register the blueprints
     app.register_blueprint(auth)
-    app.register_blueprint(main)
+    app.register_blueprint(predict)
 
     # Import User here to avoid circular imports
     from app.models.user import User
