@@ -28,10 +28,6 @@ class LoginForm(FlaskForm):
 # Registration of the route.
 auth = Blueprint('auth', __name__, url_prefix='/auth')
 
-@auth.route('/', methods=["GET"])
-def home():
-    return render_template('index.html')
-
 @auth.route('/register', methods=['GET'])
 def display_register_form():
     return render_template('register.html')

@@ -11,6 +11,10 @@ def create_app(config_class):
     db.init_app(app)  # Tie the db instance to the app
     login_manager.init_app(app)  # Initialize Flask-Login
 
+    @app.route('/')
+    def home():
+        return render_template('index.html')
+
     from app.routes.predict import prediction
     from app.routes.auth import auth
     # Register the blueprints
