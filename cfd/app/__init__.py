@@ -1,6 +1,6 @@
+from flask import Flask, render_template
 from flask_login import LoginManager
 from app.extensions import db
-from flask import Flask
 
 login_manager = LoginManager()
 
