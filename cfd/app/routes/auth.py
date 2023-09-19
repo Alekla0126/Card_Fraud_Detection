@@ -59,7 +59,7 @@ def register():
 @auth.route('/login', methods=['GET'])
 def display_login_form():
     if current_user.is_authenticated:
-        return redirect(url_for('main.predict_screen'))
+        return redirect(url_for('prediction.predict'))
     return render_template('login.html')
 
 @auth.route('/login', methods=['POST'])

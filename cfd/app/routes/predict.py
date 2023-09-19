@@ -2,20 +2,22 @@
 from flask import Flask, jsonify, request, render_template
 # from nltk.stem.snowball import SnowballStemmer
 # from nltk.tokenize import RegexpTokenizer
-from sklearn.feature_extraction.text import CountVectorizer
-from nltk.tokenize import RegexpTokenizer
+# from sklearn.feature_extraction.text import CountVectorizer
+# from nltk.tokenize import RegexpTokenizer
 from flask import Blueprint, current_app
-from nltk.stem import PorterStemmer
+# from nltk.stem import PorterStemmer
+from app.models.user import User
 from functools import wraps
 import pandas as pd
+import datetime
 import joblib
+import jwt
 # from keras.models import load_model
 # from flask import request, jsonify
 # from app.models.user import User
 # # from config import API_KEY
 # import pandas as pd
 # import traceback
-# import datetime
 # import requests
 # import pickle
 # import jwt
@@ -24,12 +26,25 @@ import joblib
 # Adding the blueprint.
 prediction = Blueprint('prediction', __name__, url_prefix='/prediction')
 
-# Load the trained SVM model
-clf = joblib.load('one_class_svm.pkl')
-# Intialize the tokenizer.
-cv = CountVectorizer(max_features=1000)
-tokenizer = RegexpTokenizer(r'[A-Za-z]+')
-stemmer = PorterStemmer()
+model = joblib.load('app/knn.pkl')
+
+def extract_features(df):
+    df['url_length'] = df['URL'].apply(len)
+    df['num_subdomains'] = df['URL'].apply(lambda x: x.count('.'))
+    df['num_special_chars'] = df['URL'].apply(lambda x: sum([1 for char in x if not char.isalnum()]))
+    # Add other relevant features
+    return df
+
+def prepare_data(X):
+    # Tokenize the text.
+    X['text_tokenized'] = X['URL'].map(lambda t: tokenizer.tokenize(t)) 
+    # Stem the text.
+    X['text_stemmed'] = X['text_tokenized'].map(lambda t: [stemmer.stem(word) for word in t])
+    # Join the text.
+    X['text_sent'] = X['text_stemmed'].map(lambda t: ' '.join(t))
+    # Vectorize the text.
+    features = cv.fit_transform(X['text_sent'])
+    return X, features
 
 def token_required(f):
     @wraps(f)
@@ -71,26 +86,130 @@ def decode_token(token):
     except jwt.InvalidTokenError:
         raise Exception('Invalid token')
 
-@prediction.route('/prediction', methods=['GET'])
+# Prediction view.
+@prediction.route('/', methods=['GET'])
 def get_predict_screen():
     return render_template('predict.html')
 
-@prediction.route('/prediction', methods=['POST'])
+# Extract features from URL
+def using_ip(url):
+    # Check if URL contains an IP address
+    return 1 if any(char.isdigit() for char in url.split('//')[-1].split('/')[0]) else 2
+
+def long_url(url):
+    # Check the length of the URL
+    return 1 if len(url) < 54 else 2 if len(url) < 75 else 3
+
+def short_url(url):
+    # Check for URL shortening services
+    shorteners = ['bit.ly', 'goo.gl', 'tinyurl.com', 't.co']
+    return 1 if any(shortener in url for shortener in shorteners) else 2
+
+def symbol_at(url):
+    # Check if URL contains '@'
+    return 1 if '@' in url else 2
+
+def redirecting(url):
+    # Check if URL has '//' after the protocol
+    return 1 if '//' in url.split('://')[-1] else 2
+
+def https(url):
+    # Check if URL uses HTTPS
+    return 1 if 'https://' in url else 2 if 'http://' in url else 3
+
+def sub_domains(url):
+    # Count the number of subdomains
+    return url.split('://')[-1].count('.')
+
+def prefix_suffix(url):
+    # Check if domain has '-'
+    domain = url.split('://')[-1].split('/')[0]
+    return 1 if '-' in domain else 2
+
+def domain_reg_len(url):
+    # Check the length of the domain name
+    domain = url.split('://')[-1].split('/')[0]
+    return 1 if len(domain) <= 6 else 2
+
+def non_std_port(url):
+    # Check for non-standard ports
+    if ":80" in url or ":443" in url:
+        return 2
+    elif ":" in url.split('://')[-1]:
+        return 1
+    return 2
+
+def https_domain_url(url):
+    # Check if domain starts with "https"
+    domain = url.split('://')[-1].split('/')[0]
+    return 1 if domain.startswith("https") else 2
+
+def request_url(url):
+    # Basic check for ".js" in the URL
+    return 1 if ".js" in url else 2
+
+def anchor_url(url):
+    # Check for anchor '#' in the URL
+    return 1 if '#' in url else 2
+
+def info_email(url):
+    # Check for "mailto:"
+    return 1 if "mailto:" in url else 2
+
+def abnormal_url(url):
+    # Basic check if domain is in the URL
+    domain = url.split('://')[-1].split('/')[0]
+    return 1 if domain in url else 2
+
+def iframe_redirection(url):
+    # Basic check for "iframe" in the URL
+    return 1 if "iframe" in url else 2
+
+def google_index(url):
+    # Basic check for "google" in the URL
+    return 1 if "google" in url else 2
+
+def stats_report(url):
+    # Check for common stats reporting paths
+    return 1 if "/stats" in url or "/report" in url else 2
+
+def hash_url(url):
+    return hash(url)
+
+@prediction.route('/', methods=['POST'])
 @token_required
-def predict():
-    # Get the URL from the request.
-    data = request.get_json()
+def predict(current_user):
+    # Get the URL from the POST request
+    data = request.get_json(force=True)
     url = data['URL']
-    # Create a dataframe.
+
+    # Create a DataFrame from the URL
     df = pd.DataFrame([url], columns=['URL'])
-    # Ensure URL is a string.
-    df['URL'] = df['URL'].fillna('').astype(str)
-    # Extract features.
+
+    # Preprocess the URL using the functions you've defined
     df = extract_features(df)
-    # Prepare the data.
-    _, features = prepare_data(df)
-    # Predict.
-    prediction = clf.predict(features)
-    # Check if the URL is malicious (-1) or not (1)
-    result = "Malicious" if prediction[0] == -1 else "Safe"
-    return jsonify({"prediction": result})
+    df['UsingIP'] = df['URL'].apply(using_ip)
+    df['LongURL'] = df['URL'].apply(long_url)
+    df['ShortURL'] = df['URL'].apply(short_url)
+    df['Symbol@'] = df['URL'].apply(symbol_at)
+    df['Redirecting//'] = df['URL'].apply(redirecting)
+    df['HTTPS'] = df['URL'].apply(https)
+    df['SubDomains'] = df['URL'].apply(sub_domains)
+    df['PrefixSuffix-'] = df['URL'].apply(prefix_suffix)
+    df['DomainRegLen'] = df['URL'].apply(domain_reg_len)
+    df['NonStdPort'] = df['URL'].apply(non_std_port)
+    df['HTTPSDomainURL'] = df['URL'].apply(https_domain_url)
+    df['RequestURL'] = df['URL'].apply(request_url)
+    df['AnchorURL'] = df['URL'].apply(anchor_url)
+    df['InfoEmail'] = df['URL'].apply(info_email)
+    df['AbnormalURL'] = df['URL'].apply(abnormal_url)
+    df['IframeRedirection'] = df['URL'].apply(iframe_redirection)
+    df['GoogleIndex'] = df['URL'].apply(google_index)
+    df['StatsReport'] = df['URL'].apply(stats_report)
+    df['URL'] = df['URL'].apply(hash_url)
+
+    # Predict the class using the model
+    prediction = model.predict(df)
+
+    # Return the prediction
+    return jsonify({'prediction': int(prediction[0])})

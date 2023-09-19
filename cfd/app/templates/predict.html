@@ -12,7 +12,7 @@
             const data = {};
             formData.forEach((value, key) => data[key] = value);
             try {
-                const response = await fetch('/predict', {
+                const response = await fetch('/prediction', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -32,7 +32,7 @@
 <body>
     <h2>Enter URL to Classify</h2>
     <form onsubmit="sendData(event)">
-        URL: <input type="text" name="url" required><br><br>
+        URL: <input type="text" name="URL" required><br><br>
         <input type="submit" value="Predict">
     </form>
 </body>
