@@ -26,7 +26,7 @@ import jwt
 # Adding the blueprint.
 prediction = Blueprint('prediction', __name__, url_prefix='/prediction')
 
-model = joblib.load('app/knn.pkl')
+model = joblib.load('app/svm.pkl')
 
 def extract_features(df):
     df['url_length'] = df['URL'].apply(len)
