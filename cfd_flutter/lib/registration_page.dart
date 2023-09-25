@@ -92,6 +92,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               TextFormField(
@@ -137,13 +138,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 decoration: const InputDecoration(labelText: 'Select Tier'),
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
+              Container(
+                width: double.infinity,
+                child: ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     registerUser(usernameController.text, passwordController.text, _selectedTier!);
                   }
                 },
                 child: const Text('Register'),
+              ),
               ),
             ],
           ),
