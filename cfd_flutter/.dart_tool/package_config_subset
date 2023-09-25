@@ -22,6 +22,10 @@ cookie_jar
 2.15
 file:///Users/alejandro/.pub-cache/hosted/pub.dev/cookie_jar-4.0.8/
 file:///Users/alejandro/.pub-cache/hosted/pub.dev/cookie_jar-4.0.8/lib/
+csslib
+2.19
+file:///Users/alejandro/.pub-cache/hosted/pub.dev/csslib-1.0.0/
+file:///Users/alejandro/.pub-cache/hosted/pub.dev/csslib-1.0.0/lib/
 cupertino_icons
 2.19
 file:///Users/alejandro/.pub-cache/hosted/pub.dev/cupertino_icons-1.0.6/
@@ -50,6 +54,10 @@ flutter_lints
 2.19
 file:///Users/alejandro/.pub-cache/hosted/pub.dev/flutter_lints-2.0.3/
 file:///Users/alejandro/.pub-cache/hosted/pub.dev/flutter_lints-2.0.3/lib/
+html
+2.19
+file:///Users/alejandro/.pub-cache/hosted/pub.dev/html-0.15.4/
+file:///Users/alejandro/.pub-cache/hosted/pub.dev/html-0.15.4/lib/
 http
 3.0
 file:///Users/alejandro/.pub-cache/hosted/pub.dev/http-1.1.0/

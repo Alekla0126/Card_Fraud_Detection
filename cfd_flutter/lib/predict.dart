@@ -1,9 +1,9 @@
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'dart:html' as html;
 import 'dart:convert';
 import 'dart:core';
 
@@ -28,6 +28,18 @@ class _PredictionPageState extends State<PredictionPage> {
     responseType: ResponseType.json,
   );
 
+  String? getTokenFromCookies() {
+    String? cookies = html.document.cookie;
+    List<String>? cookieList = cookies?.split(';');
+    for (var cookie in cookieList!) {
+      List<String> cookieParts = cookie.split('=');
+      if (cookieParts[0].trim() == 'token') {
+        return cookieParts[1].trim();
+      }
+    }
+    return null;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +51,20 @@ class _PredictionPageState extends State<PredictionPage> {
 
   Future<void> sendPredictionRequest(String url) async {
     try {
+      String? authToken = getTokenFromCookies();
+      if (authToken == null) {
+        print('Token not found in cookies');
+        setState(() {
+          predictionResult = 'Token not found';
+        });
+        return;
+      }
+
+      cookieJar.saveFromResponse(
+          Uri.parse(options.baseUrl),
+          [Cookie("token", authToken)]
+      );
+
       final response = await dio.post(
         '/prediction/',
         data: jsonEncode({'URL': url}),
@@ -51,18 +77,6 @@ class _PredictionPageState extends State<PredictionPage> {
           },
         ),
       );
-      if (response.statusCode == 200) {
-        final int prediction = response.data['prediction'];
-        setState(() {
-          predictionResult = 'Predicted Class: $prediction';
-        });
-      } else {
-        print('HTTP Error: ${response.statusCode}');
-        final String message = response.data['message'] ?? 'Prediction failed';
-        setState(() {
-          predictionResult = message;
-        });
-      }
     } catch (error) {
       // Handle network or other errors
       print('Error: $error');

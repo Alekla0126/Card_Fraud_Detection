@@ -38,6 +38,12 @@
       "languageVersion": "2.15"
     },
     {
+      "name": "csslib",
+      "rootUri": "file:///Users/alejandro/.pub-cache/hosted/pub.dev/csslib-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "cupertino_icons",
       "rootUri": "file:///Users/alejandro/.pub-cache/hosted/pub.dev/cupertino_icons-1.0.6",
       "packageUri": "lib/",
@@ -96,6 +102,12 @@
       "rootUri": "file:///Users/alejandro/Documents/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "html",
+      "rootUri": "file:///Users/alejandro/.pub-cache/hosted/pub.dev/html-0.15.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "http",
@@ -296,7 +308,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2023-09-25T06:24:13.963446Z",
+  "generated": "2023-09-25T20:38:00.094242Z",
   "generator": "pub",
   "generatorVersion": "3.1.0"
 }
