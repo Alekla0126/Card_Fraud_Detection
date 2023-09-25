@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Welcome!',
+              '¡Bienvenido!',
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
@@ -28,14 +28,14 @@ class HomePage extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pushNamed('/login');
                 },
-                child: const Text('Login'),
+                child: const Text('Inicio'),
               ),
               const SizedBox(height: 10.0),
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed('/register');
                 },
-                child: const Text('Register'),
+                child: const Text('Crear sesión'),
               ),
             ],
             if (isAuthenticated) ...[
@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
                 onPressed: () {
                   // Implement logout logic here.
                 },
-                child: const Text('Logout'),
+                child: const Text('Cerrar sesión'),
               ),
             ],
           ],

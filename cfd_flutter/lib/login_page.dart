@@ -1,9 +1,10 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cfd_flutter/predict.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import 'dart:convert';
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'http_client.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -23,33 +24,20 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> loginUser(String username, String password) async {
     final Uri uri = Uri.parse(
         'https://bancolombias-url-fraud-detection.onrender.com/auth/login');
-    final response = await http.post(
-      uri,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
+    final response = await httpClient.send(http.Request('POST', uri)
+      ..headers['Content-Type'] = 'application/json'
+      ..body = jsonEncode({
         'username': username,
         'password': password,
-      }),
-    );
+      }));
     if (response.statusCode == 200) {
-      Map<String, dynamic> responseData = jsonDecode(response.body);
+      final http.Response finalResponse = await http.Response.fromStream(response);
+      Map<String, dynamic> responseData = jsonDecode(finalResponse.body);
       if (responseData['status'] == 'success') {
-        // Extracting the token from the headers
-        String? rawCookie = response.headers['set-cookie'];
-        if (rawCookie != null) {
-          int index = rawCookie.indexOf(';');
-          // The token will be saved as: token=YOUR_TOKEN_VALUE;
-          String cookie =
-              (index == -1) ? rawCookie : rawCookie.substring(0, index);
-          // Now you can store the cookie or use it for subsequent requests.
-          print(cookie);
-          saveToken(cookie);
-        }
+        // So, we can navigate to the PredictionPage directly.
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => PredictionPage(cookie),
+            builder: (context) => PredictionPage(),  // No token argument is needed.
           ),
         );
       } else {
@@ -60,10 +48,11 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: const Text('Inicio')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -80,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: true,
             ),
             const SizedBox(height: 16),
-            Container(
+            SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 child: const Text('Login'),

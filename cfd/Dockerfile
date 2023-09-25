@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image.
-FROM arm64v8/python:3
+FROM arm64v8/python:3.8.18-alpine3.18
 
 # Set the working directory in the container to /app.
 WORKDIR /app

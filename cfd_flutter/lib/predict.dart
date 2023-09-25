@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/foundation.dart';
@@ -6,10 +7,8 @@ import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PredictionPage extends StatefulWidget {
-  PredictionPage(cookie);
   @override
   _PredictionPageState createState() => _PredictionPageState();
 }
@@ -19,15 +18,10 @@ class _PredictionPageState extends State<PredictionPage> {
   String predictionResult = '';
   final Dio dio = Dio();
 
-  Future<String?> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token');
-  }
-
   // Set up cookie jar and attach it to Dio
   final CookieJar cookieJar = CookieJar();
   final BaseOptions options = BaseOptions(
-    baseUrl: 'https://bancolombias-url-fraud-detection.onrender.com/prediction',
+    baseUrl: 'https://bancolombias-url-fraud-detection.onrender.com',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -39,23 +33,15 @@ class _PredictionPageState extends State<PredictionPage> {
     super.initState();
     dio.options = options;
     if (!kIsWeb) {
-      // Only add CookieManager for non-web platforms
       dio.interceptors.add(CookieManager(cookieJar));
     }
   }
 
-  String? = getToken
-
   Future<void> sendPredictionRequest(String url) async {
     try {
       final response = await dio.post(
-        '/prediction',
+        '/prediction/',
         data: jsonEncode({'URL': url}),
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',  // Assuming the token type is Bearer
-          },
-        ),
       );
       if (response.statusCode == 200) {
         final int prediction = response.data['prediction'];
@@ -63,10 +49,10 @@ class _PredictionPageState extends State<PredictionPage> {
           predictionResult = 'Predicted Class: $prediction';
         });
       } else {
-        // Handle HTTP error responses
         print('HTTP Error: ${response.statusCode}');
+        final String message = response.data['message'] ?? 'Prediction failed';
         setState(() {
-          predictionResult = 'Prediction failed';
+          predictionResult = message;
         });
       }
     } catch (error) {
@@ -102,7 +88,7 @@ class _PredictionPageState extends State<PredictionPage> {
               ),
             ),
             const SizedBox(height: 20),
-            Container(
+            SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
