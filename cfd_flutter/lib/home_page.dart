@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-  final bool isAuthenticated;
-
-  const HomePage({Key? key, required this.isAuthenticated}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +21,6 @@ class HomePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20.0),
-            if (!isAuthenticated) ...[
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed('/login');
@@ -38,15 +35,6 @@ class HomePage extends StatelessWidget {
                 child: const Text('Crear sesión'),
               ),
             ],
-            if (isAuthenticated) ...[
-              ElevatedButton(
-                onPressed: () {
-                  // Implement logout logic here.
-                },
-                child: const Text('Cerrar sesión'),
-              ),
-            ],
-          ],
         ),
       ),
     );

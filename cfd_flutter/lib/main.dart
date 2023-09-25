@@ -5,8 +5,7 @@ import 'package:cfd_flutter/login_page.dart';
 import 'home_page.dart';
 
 void main() async {
-  final bool isAuthenticated = await checkAuthentication();
-  runApp(MyApp(isAuthenticated: isAuthenticated));
+  runApp(const MyApp());
 }
 
 Future<bool> checkAuthentication() async {
@@ -22,8 +21,7 @@ Future<bool> checkAuthentication() async {
 }
 
 class MyApp extends StatelessWidget {
-  final bool isAuthenticated;
-  const MyApp({Key? key, required this.isAuthenticated}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,7 +29,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => HomePage(isAuthenticated: isAuthenticated),
+        '/': (context) => HomePage(),
         '/register': (context) => const RegistrationPage(),
         '/login': (context) => LoginPage()
       },

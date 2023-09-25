@@ -42,6 +42,14 @@ class _PredictionPageState extends State<PredictionPage> {
       final response = await dio.post(
         '/prediction/',
         data: jsonEncode({'URL': url}),
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          extra: {
+            'withCredentials': true,
+          },
+        ),
       );
       if (response.statusCode == 200) {
         final int prediction = response.data['prediction'];
