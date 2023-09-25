@@ -78,7 +78,7 @@ def login():
         # Generate an access token for the logged-in user using the `generate_token` function
         token = generate_token(user.id, user.tier)
         response = make_response(jsonify({'status': 'success', 'message': 'Logged in successfully.'}), 200)
-        response.set_cookie('token', token)
+        response.set_cookie('token', token, secure=True, httponly=True, samesite='Strict')
         return response
     return jsonify({'status': 'error', 'message': 'Invalid username or password.'}), 401
 
