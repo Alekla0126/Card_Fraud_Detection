@@ -4,8 +4,7 @@ from flask_cors import CORS
 import os
 
 app = create_app(ConfigClass)
-# cors = CORS(app, resources={r"/*": {"origins": "*", "supports_credentials": True}})
-cors = CORS(app, origins=['https://alekla0126.github.io'], methods=['GET', 'POST'], allow_headers=['Content-Type'])
+cors = CORS(app, resources={r"/*": {"origins": "*", "supports_credentials": True}})
 
 with app.app_context():
     db.create_all()

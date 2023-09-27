@@ -19,51 +19,38 @@ class _PredictionPageState extends State<PredictionPage> {
   final Dio dio = Dio();
 
   // Set up cookie jar and attach it to Dio
-  final CookieJar cookieJar = CookieJar();
-  final BaseOptions options = BaseOptions(
-    baseUrl: 'https://bancolombias-url-fraud-detection.onrender.com',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    responseType: ResponseType.json,
-  );
+  // final CookieJar cookieJar = CookieJar();
+  // final BaseOptions options = BaseOptions(
+  //   baseUrl: 'https://bancolombias-url-fraud-detection.onrender.com',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   responseType: ResponseType.json,
+  // );
 
-  String? getTokenFromCookies() {
-    String? cookies = html.document.cookie;
-    List<String>? cookieList = cookies?.split(';');
-    for (var cookie in cookieList!) {
-      List<String> cookieParts = cookie.split('=');
-      if (cookieParts[0].trim() == 'token') {
-        return cookieParts[1].trim();
-      }
-    }
-    return null;
-  }
+  // String? getTokenFromCookies() {
+  //   String? cookies = html.document.cookie;
+  //   List<String>? cookieList = cookies?.split(';');
+  //   for (var cookie in cookieList!) {
+  //     List<String> cookieParts = cookie.split('=');
+  //     if (cookieParts[0].trim() == 'token') {
+  //       return cookieParts[1].trim();
+  //     }
+  //   }
+  //   return null;
+  // }
 
   @override
   void initState() {
     super.initState();
-    dio.options = options;
-    if (!kIsWeb) {
-      dio.interceptors.add(CookieManager(cookieJar));
-    }
+    // dio.options = options;
+    // if (!kIsWeb) {
+    //   dio.interceptors.add(CookieManager(cookieJar));
+    // }
   }
 
   Future<void> sendPredictionRequest(String url) async {
     try {
-      String? authToken = getTokenFromCookies();
-      if (authToken == null) {
-        print('Token not found in cookies');
-        setState(() {
-          predictionResult = 'Token not found';
-        });
-        return;
-      }
-
-      cookieJar.saveFromResponse(
-          Uri.parse(options.baseUrl),
-          [Cookie("token", authToken)]
-      );
 
       final response = await dio.post(
         '/prediction/',
