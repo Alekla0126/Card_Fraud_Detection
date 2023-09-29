@@ -2,9 +2,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cfd_flutter/predict.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'dart:convert';
-
 import 'http_client.dart';
+import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -35,11 +34,7 @@ class _LoginPageState extends State<LoginPage> {
       Map<String, dynamic> responseData = jsonDecode(finalResponse.body);
       if (responseData['status'] == 'success') {
         // So, we can navigate to the PredictionPage directly.
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => UrlClassification(),  // No token argument is needed.
-          ),
-        );
+        Navigator.of(context).pushNamed('/prediction');
       } else {
         print(responseData['message']);
       }

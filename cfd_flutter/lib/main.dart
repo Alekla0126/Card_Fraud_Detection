@@ -1,7 +1,8 @@
 import 'package:cfd_flutter/registration_page.dart';
+import 'package:cfd_flutter/login_page.dart';
+import 'package:cfd_flutter/predict.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:cfd_flutter/login_page.dart';
 import 'home_page.dart';
 
 void main() async {
@@ -31,7 +32,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => HomePage(),
         '/register': (context) => const RegistrationPage(),
-        '/login': (context) => LoginPage()
+        '/login': (context) => LoginPage(),
+        '/prediction': (context) => UrlClassification()
       },
     );
   }
