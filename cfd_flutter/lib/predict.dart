@@ -1,75 +1,38 @@
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:cookie_jar/cookie_jar.dart';
-import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import 'dart:html' as html;
 import 'dart:convert';
-import 'dart:core';
 
-
-class PredictionPage extends StatefulWidget {
+class UrlClassification extends StatefulWidget {
   @override
-  _PredictionPageState createState() => _PredictionPageState();
+  _UrlClassificationState createState() => _UrlClassificationState();
 }
 
-class _PredictionPageState extends State<PredictionPage> {
-  final TextEditingController urlController = TextEditingController();
-  String predictionResult = '';
-  final Dio dio = Dio();
+class _UrlClassificationState extends State<UrlClassification> {
+  final _urlController = TextEditingController();
 
-  // Set up cookie jar and attach it to Dio
-  // final CookieJar cookieJar = CookieJar();
-  // final BaseOptions options = BaseOptions(
-  //   baseUrl: 'https://bancolombias-url-fraud-detection.onrender.com',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   responseType: ResponseType.json,
-  // );
-
-  // String? getTokenFromCookies() {
-  //   String? cookies = html.document.cookie;
-  //   List<String>? cookieList = cookies?.split(';');
-  //   for (var cookie in cookieList!) {
-  //     List<String> cookieParts = cookie.split('=');
-  //     if (cookieParts[0].trim() == 'token') {
-  //       return cookieParts[1].trim();
-  //     }
-  //   }
-  //   return null;
-  // }
-
-  @override
-  void initState() {
-    super.initState();
-    // dio.options = options;
-    // if (!kIsWeb) {
-    //   dio.interceptors.add(CookieManager(cookieJar));
-    // }
-  }
-
-  Future<void> sendPredictionRequest(String url) async {
+  Future<void> sendData() async {
+    final url = _urlController.text;
+    if (url.isEmpty) {
+      return;
+    }
     try {
-
-      final response = await dio.post(
-        '/prediction/',
-        data: jsonEncode({'URL': url}),
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          extra: {
-            'withCredentials': true,
-          },
-        ),
+      final response = await http.post(
+        Uri.parse('https://bancolombias-url-fraud-detection.onrender.com/prediction'),
+        // Add the corresponding when the token will be added.
+        // headers: {'Content-Type': 'application/json'},
+        body: json.encode({'URL': url}),
+      );
+      final result = json.decode(response.body);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text(json.encode(result)),
+          );
+        },
       );
     } catch (error) {
-      // Handle network or other errors
       print('Error: $error');
-      setState(() {
-        predictionResult = 'Prediction failed';
-      });
     }
   }
 
@@ -82,37 +45,22 @@ class _PredictionPageState extends State<PredictionPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text(
-              'Enter URL to Classify',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 20),
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
             TextField(
-              controller: urlController,
+              controller: _urlController,
               decoration: const InputDecoration(
                 labelText: 'URL',
-                border: OutlineInputBorder(),
               ),
+              keyboardType: TextInputType.url,
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  final url = urlController.text;
-                  if (url.isNotEmpty) {
-                    sendPredictionRequest(url);
-                  }
-                },
-                child: const Text('Predict'),
+                onPressed: sendData,
+                child: Text('Predict'),
               ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              predictionResult,
-              style: const TextStyle(fontSize: 18),
             ),
           ],
         ),

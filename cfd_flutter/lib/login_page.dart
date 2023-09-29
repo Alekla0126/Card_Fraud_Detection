@@ -1,3 +1,4 @@
+import 'package:cfd_flutter/predict.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cfd_flutter/predict.dart';
 import 'package:http/http.dart' as http;
@@ -37,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
         // So, we can navigate to the PredictionPage directly.
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => PredictionPage(),  // No token argument is needed.
+            builder: (context) => UrlClassification(),  // No token argument is needed.
           ),
         );
       } else {
