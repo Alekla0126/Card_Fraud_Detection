@@ -179,7 +179,7 @@ def hash_url(url):
 @prediction.route('/', methods=['POST'])
 # Uncomment for production.
 # @token_required
-def predict(current_user):
+def predict():
     # Get the URL from the POST request
     data = request.get_json(force=True)
     url = data['URL']
