@@ -21,15 +21,12 @@ class HomePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20.0),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
+              ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed('/login');
                 },
                   child: const Text('Inicio'),
               ),
-            ),
               const SizedBox(height: 10.0),
               ElevatedButton(
                 onPressed: () {
