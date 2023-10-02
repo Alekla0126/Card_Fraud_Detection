@@ -16,24 +16,41 @@ class _UrlClassificationState extends State<UrlClassification> {
       return;
     }
     try {
-      final response = await http.post(
-        Uri.parse('https://bancolombias-url-fraud-detection.onrender.com/prediction'),
-        // Add the corresponding when the token will be added.
-        // headers: {'Content-Type': 'application/json'},
-        body: json.encode({'URL': url}),
-      );
-      final result = json.decode(response.body);
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Text(json.encode(result)),
-          );
-        },
-      );
+      final result = await performNetworkRequest(url);
+      showResultDialog(result);
     } catch (error) {
-      print('Error: $error');
+      showErrorDialog(error);
     }
+  }
+
+  Future<Map<String, dynamic>> performNetworkRequest(String url) async {
+    final response = await http.post(
+      Uri.parse('https://bancolombias-url-fraud-detection.onrender.com/prediction'),
+      body: json.encode({'URL': url}),
+    );
+    return json.decode(response.body);
+  }
+
+  void showResultDialog(Map<String, dynamic> result) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(json.encode(result)),
+        );
+      },
+    );
+  }
+
+  void showErrorDialog(Object error) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text('Error: $error'),
+        );
+      },
+    );
   }
 
   @override
