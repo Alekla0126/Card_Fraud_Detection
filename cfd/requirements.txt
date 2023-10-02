@@ -13,11 +13,11 @@ tensorflow
 requests
 protobuf
 gunicorn
-Werkzeug==1.0.1
+Werkzeug
 python-jose
 cryptography
 flask-cors
 psycopg2-binary
 flask_sqlalchemy
 PyJWT
-MarkupSafe==1.1.1
+MarkupSafe
